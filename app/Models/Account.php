@@ -10,7 +10,7 @@ class Account extends Authenticatable
     protected $primaryKey = 'account_id';
 
     protected $fillable = [
-        'email', 'password', 'role_id'
+        'name','email', 'password', 'role_id'
     ];
 
     protected $hidden = [

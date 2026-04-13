@@ -120,9 +120,13 @@
                 <p class="success">{{ session('success') }}</p>
             @endif
 
-            <form method="POST" action="/register">
+            <form method="POST" action="{{ route('register') }}">
                 @csrf
 
+                <div class="input-group">
+                    <label>Họ và Tên</label>
+                    <input type="name" name="name" placeholder="Nhập họ và tên" required>
+                </div>
                 <div class="input-group">
                     <label>Email</label>
                     <input type="email" name="email" placeholder="Nhập email" required>

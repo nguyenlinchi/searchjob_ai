@@ -12,30 +12,40 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    // ================= HIỂN THỊ FORM =================
+    public function showRegister()
+    {
+        return view('auth.register');
+    }
+
+    public function showLogin()
+    {
+        return view('auth.login');
+    }
+
     // ================= REGISTER =================
     public function register(Request $request)
     {
         $request->validate([
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:accounts,email',
             'password' => 'required|min:6',
             'role' => 'required'
         ]);
 
-        // tìm role
         $role = Role::where('role_name', $request->role)->first();
 
         if (!$role) {
             return back()->with('error', 'Role không tồn tại');
         }
 
-        // tạo account
         $account = Account::create([
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => $role->role_id
         ]);
 
-        // tạo profile tương ứng
         if ($request->role == 'CANDIDATE') {
             Candidate::create([
                 'account_id' => $account->account_id
@@ -46,7 +56,7 @@ class AuthController extends Controller
             ]);
         }
 
-        return redirect('/login')->with('success', 'Đăng ký thành công');
+        return redirect()->route('login')->with('success', 'Đăng ký thành công');
     }
 
     // ================= LOGIN =================
@@ -59,7 +69,6 @@ class AuthController extends Controller
             $user = Auth::user();
             $role = $user->role->role_name;
 
-            // phân quyền
             if ($role == 'ADMIN') {
                 return redirect('/admin');
             } elseif ($role == 'EMPLOYER') {
@@ -76,6 +85,6 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect('/login');
+        return redirect()->route('login');
     }
 }

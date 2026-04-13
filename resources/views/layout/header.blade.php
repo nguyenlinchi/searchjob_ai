@@ -83,9 +83,10 @@
     <div class="nav-links">
         <a href="#">Trang chủ</a>
         <a href="#">Việc làm</a>
-        <a href="#">Về chúng tôi</a>
-        <a href="/register">Đăng ký</a>
-        <a href="/login" class="sign-in">Đăng nhập</a>
+        <a href="#">CV</a>
+         <a href="#">Cẩm nang nghề nghiệp</a>
+        <a href="{{ route('register') }}">Đăng ký</a>
+        <a href="{{ route('login') }}" class="sign-in">Đăng nhập</a>
     </div>
 </div>
 
