@@ -12,6 +12,12 @@ class Employer extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'account_id'
+        'account_id',
+         'company_name',
+        'avatar'
     ];
+     public function jobs()
+    {
+        return $this->hasMany(JobPosting::class, 'employer_id');
+    }
 }

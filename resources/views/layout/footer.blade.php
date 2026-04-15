@@ -4,7 +4,7 @@
                 alt="FPT Logo" class="company-logo">
 
             <h1>
-                Công ty TNHH FPT HIRING <br>
+                Công ty TNHH GOOD JOB <br>
                 <span class="sub-text">Ban nhân sự</span>
             </h1>
         </div>
@@ -20,26 +20,27 @@
             </div>
             <div class="section">
                 <h2>Về chúng tôi</h2>
-                <p><a href="{{ route('about') }}#gioi-thieu" class="disabled-link">Giới thiệu công ty</a></p>
-                <p><a href="{{ route('about') }}#van-phong" class="disabled-link">Tham quan văn phòng</a></p>
-                <p><a href="{{ route('about') }}#lien-he" class="disabled-link">Thông tin liên hệ</a></p>
-                <p><a href="{{ route('about') }}#cau-hoi" class="disabled-link">Câu hỏi thường gặp</a></p>
+                <p><a href="#gioi-thieu" class="disabled-link">Giới thiệu công ty</a></p>
+                <p><a href="#van-phong" class="disabled-link">Tham quan văn phòng</a></p>
+                <p><a href="#lien-he" class="disabled-link">Thông tin liên hệ</a></p>
+                <p><a href="#cau-hoi" class="disabled-link">Câu hỏi thường gặp</a></p>
             </div>
             <div class="section">
                 <h2>Việc làm</h2>
-                <p><a href="{{ route('job.index') }}" class="disabled-link">Công việc</a></p>
-                <p><a href="{{ route('job.index') }}" class="disabled-link">Phát triển sự nghiệp</a></p>
-                <p><a href="{{ route('job.index') }}" class="disabled-link">Phúc lợi</a></p>
+                <p><a href="#" class="disabled-link">Công việc</a></p>
+                <p><a href="#" class="disabled-link">Phát triển sự nghiệp</a></p>
+                <p><a href="#" class="disabled-link">Phúc lợi</a></p>
+                <p><a href="#" class="disabled-link">CV</a></p>
             </div>
             <div class="section">
                 <h2>Tin tức & Sự kiện</h2>
-                <p><a href="{{ route('news') }}" class="disabled-link">Tin tức</a></p>
-                <p><a href="{{ route('news') }}" class="disabled-link">Sự kiện</a></p>
+                <p><a href="#" class="disabled-link">Tin tức</a></p>
+                <p><a href="#" class="disabled-link">Sự kiện</a></p>
             </div>
         </div>
         <div class="company-support-container">
             <div class="company-support-item follow">
-                <p>Theo dõi các kênh chính thức của FPT</p>
+                <p>Theo dõi các kênh chính thức của GOOD JOB</p>
             </div>
             <div class="company-support-item">
                 <h5>Hỗ trợ Khách hàng</h5>
@@ -60,7 +61,7 @@
 
         <div class="footer-content">
             <div class="footer-section">
-                <p>Copyright © 2025. Official Website Tuyển dụng của Công ty FPT (FPT Hiring).</p>
+                <p>Copyright © 2026. Official Website Tuyển dụng của Công ty Good job.</p>
             </div>
         </div>
    
