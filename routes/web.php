@@ -13,12 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\JobController;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-// Route::get('/', function () {
-//     return view('home');
-// });
-use App\Http\Controllers\AuthController;
+Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
+Route::get('/jobs/{id}', [JobController::class, 'show'])->name('jobs.show');
+
+
 
 // form
 Route::get('/login', function () {

@@ -6,7 +6,9 @@
 
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('css/home.css') }}">
-                <link rel="stylesheet" href="{{ asset('css/job.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/job.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/show.css') }}">
+
 
 
 
@@ -86,7 +88,7 @@
 
     <div class="nav-links">
         <a href="#">Trang chủ</a>
-        <a href="#">Việc làm</a>
+        <a href="{{ route('jobs.index') }}">Việc làm</a>
         <a href="#">CV</a>
          <a href="#">Cẩm nang nghề nghiệp</a>
         <a href="{{ route('register') }}">Đăng ký</a>

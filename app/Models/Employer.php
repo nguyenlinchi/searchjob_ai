@@ -13,7 +13,12 @@ class Employer extends Model
 
     protected $fillable = [
         'account_id',
-         'company_name',
+        'company_name',
+        'contact_name',
+        'position',
+        'phone',
+        'company_type',
+        'cover_image',
         'avatar'
     ];
      public function jobs()

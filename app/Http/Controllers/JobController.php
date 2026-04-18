@@ -1,12 +1,75 @@
 <?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
 use App\Models\JobPosting;
+use App\Models\Category;
+use App\Models\Salary;
+use App\Models\Location;
 
-public function index()
+
+class JobController extends Controller
 {
-    $jobs = JobPosting::with(['employer','jobType','location','salary'])
-                ->where('status', 1)
-                ->latest()
-                ->get();
+    public function index(Request $request)
+    {
+        $query = JobPosting::with([
+            'employer',
+            'jobType',
+            'salary',
+            'location'
+        ])->where('status', 1);
 
-    return view('jobs.index', compact('jobs'));
+        
+        if ($request->filled('title')) {
+            $query->where('job_title', 'like', '%' . $request->title . '%');
+        }
+
+       
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+       
+        if ($request->filled('location_id')) {
+            $query->where('location_id', $request->location_id);
+        }
+
+        
+        if ($request->filled('salary')) {
+            $query->whereIn('salary_id', $request->salary);
+        }
+
+        
+        if ($request->filled('category')) {
+            $query->whereIn('category_id', $request->category);
+        }
+
+        
+        if ($request->sort == 'deadline') {
+            $query->orderBy('deadline', 'asc');
+        } else {
+            $query->orderBy('job_id', 'desc');
+        }
+
+        $jobs = $query->paginate(6)->appends($request->all());
+
+        $categories = Category::all();
+        $salaries = Salary::all();
+         $locations = Location::all(); 
+
+
+        return view('jobs.index', compact('jobs', 'categories', 'salaries','locations'));
+    }
+    public function show($id)
+        {
+            $job = JobPosting::with([
+                'employer',
+                'jobType',
+                'salary',
+                'location',
+            ])->findOrFail($id);
+
+            return view('jobs.show', compact('job'));
+        }
 }

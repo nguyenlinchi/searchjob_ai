@@ -15,12 +15,17 @@ class AdminSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+        public function run()
     {
-         Account::create([
+        // Xóa admin cũ
+        Account::where('email', 'admin@gmail.com')->delete();
+
+        // Tạo lại
+        Account::create([
+            'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('12345678'),
-            'role_id' => 1 // ADMIN
+            'role_id' => 1
         ]);
     }
 }

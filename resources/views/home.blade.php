@@ -110,136 +110,68 @@
 
         <div class="company-container">
 
-            <!-- LEFT BIG CARD -->
+            {{-- LEFT BIG CARD --}}
+            @if($topEmployers->count() > 0)
+            @php $big = $topEmployers->first(); @endphp
+
             <div class="company-big">
-                <img src="https://res.cloudinary.com/dumvx2lsj/image/upload/v1754274553/FPT_logo_2010.svg_joiycj.png" class="logo">
+                <img src="{{ $big->avatar ?? 'images/default.png' }}" class="logo">
 
-                <h3>Ngân hàng TNHH FPT Software Việt Nam</h3>
-                <p>Ngân hàng</p>
+                <h3>{{ $big->company_name }}</h3>
+                <p>{{ $big->company_type ?? 'Chưa cập nhật' }}</p>
 
-                <span class="job-count">0 việc làm</span>
+                <span class="job-count">{{ $big->jobs_count }} việc làm</span>
 
                 <button class="pro-btn">Pro Company</button>
                 <button class="follow-btn">+ Theo dõi</button>
             </div>
+            @endif
 
-            <!-- RIGHT GRID -->
+
+            {{-- RIGHT GRID: 3 hàng × 3 --}}
             <div class="company-grid">
 
-                <!-- ITEM -->
-                <div class="company-card">
-                    <img src="https://res.cloudinary.com/dumvx2lsj/image/upload/v1754274553/FPT_logo_2010.svg_joiycj.png">
-                    <div>
-                        <h4>TOPCV SEARCH</h4>
-                        <p>IT - Phần mềm</p>
-                        <span>5 việc làm</span>
-                    </div>
-                </div>
+                @foreach($topEmployers->skip(1)->take(9)->chunk(3) as $row)
+                <div class="company-row">
 
-                <div class="company-card">
-                    <img src="https://res.cloudinary.com/dumvx2lsj/image/upload/v1754274553/FPT_logo_2010.svg_joiycj.png">
-                    <div>
-                        <h4>MANULIFE VIỆT NAM</h4>
-                        <p>Bảo hiểm</p>
-                        <span>3 việc làm</span>
-                    </div>
-                </div>
+                    @foreach($row as $employer)
+                    <div class="company-card">
+                        <img src="{{ $employer->avatar ?? 'images/default.png' }}">
 
-                <div class="company-card">
-                    <img src="https://via.placeholder.com/40">
-                    <div>
-                        <h4>CÔNG TY XÂY DỰNG</h4>
-                        <p>Xây dựng</p>
-                        <span>1 việc làm</span>
+                        <div>
+                            <h4>{{ $employer->company_name }}</h4>
+                            <p>{{ $employer->company_type ?? 'Chưa cập nhật' }}</p>
+                            <span>{{ $employer->jobs_count }} việc làm</span>
+                        </div>
                     </div>
-                </div>
+                    @endforeach
 
-                <div class="company-card">
-                    <img src="https://via.placeholder.com/40">
-                    <div>
-                        <h4>ĐẠI HỌC FPT</h4>
-                        <p>Giáo dục</p>
-                        <span>9 việc làm</span>
-                    </div>
                 </div>
-
-                <div class="company-card">
-                    <img src="https://via.placeholder.com/40">
-                    <div>
-                        <h4>FPT TELECOM</h4>
-                        <p>Viễn thông</p>
-                        <span>12 việc làm</span>
-                    </div>
-                </div>
-
-                <div class="company-card">
-                    <img src="https://via.placeholder.com/40">
-                    <div>
-                        <h4>VIETTEL</h4>
-                        <p>Công nghệ</p>
-                        <span>20 việc làm</span>
-                    </div>
-                </div>
-
-                <!-- 3 card cùng 1 hàng -->
-                <div class="company-card">
-                    <img src="https://via.placeholder.com/40">
-                    <div>
-                        <h4>FPT EDUCATION</h4>
-                        <p>Giáo dục</p>
-                        <span>9 việc làm</span>
-                    </div>
-                </div>
-
-                <div class="company-card">
-                    <img src="https://via.placeholder.com/40">
-                    <div>
-                        <h4>CMC CORPORATION</h4>
-                        <p>Công nghệ</p>
-                        <span>7 việc làm</span>
-                    </div>
-                </div>
-
-                <div class="company-card">
-                    <img src="https://via.placeholder.com/40">
-                    <div>
-                        <h4>VNG</h4>
-                        <p>Game / IT</p>
-                        <span>15 việc làm</span>
-                    </div>
-                </div>
+                @endforeach
 
             </div>
+
         </div>
+
+
+        {{-- PHẦN DƯỚI - KHÔNG TRÙNG --}}
         <div class="company-grid">
-                <div class="company-card">
-                    <img src="https://via.placeholder.com/40">
-                    <div>
-                        <h4>VNG</h4>
-                        <p>Game / IT</p>
-                        <span>15 việc làm</span>
-                    </div>
+
+            @foreach($otherEmployers as $employer)
+            <div class="company-card">
+                <img src="{{ $employer->avatar ?? 'images/default.png' }}">
+
+                <div>
+                    <h4>{{ $employer->company_name }}</h4>
+                    <p>{{ $employer->company_type ?? 'Chưa cập nhật' }}</p>
+                    <span>{{ $employer->jobs_count }} việc làm</span>
                 </div>
-                <div class="company-card">
-                    <img src="https://via.placeholder.com/40">
-                    <div>
-                        <h4>VNG</h4>
-                        <p>Game / IT</p>
-                        <span>15 việc làm</span>
-                    </div>
-                </div>
-                <div class="company-card">
-                    <img src="https://via.placeholder.com/40">
-                    <div>
-                        <h4>VNG</h4>
-                        <p>Game / IT</p>
-                        <span>15 việc làm</span>
-                    </div>
-                </div>
-                
             </div>
+            @endforeach
+
+        </div>
+
     </div>
-</div>
 
     <div class="job-dashboard">
 
@@ -328,77 +260,31 @@
     </div>
 
     <section class="job-category">
-        <div class="header">
-            <h2>Ngành nghề nổi bật</h2>
+    <div class="header">
+        <h2>Ngành nghề nổi bật</h2>
 
-            <div class="nav-btns">
-                <button id="prev">&#8592;</button>
-                <button id="next">&#8594;</button>
-            </div>
+        <div class="nav-btns">
+            <button id="prev">&#8592;</button>
+            <button id="next">&#8594;</button>
         </div>
-            <div class="category-wrapper">
-            <div class="category-grid" id="slider">
+    </div>
 
-            <div class="card">
-                <img src="https://cdn-icons-png.flaticon.com/512/3059/3059518.png">
-                <h3>Kinh doanh / Bán hàng</h3>
-                <p>+29522 Việc Làm</p>
-            </div>
+    <div class="category-wrapper">
+        <div class="category-grid" id="slider">
 
+            @foreach($categories as $category)
             <div class="card">
-                <img src="https://cdn-icons-png.flaticon.com/512/2920/2920349.png">
-                <h3>Tài chính / Kế toán</h3>
-                <p>+10124 Việc Làm</p>
-            </div>
+                <img src="{{ $category->image ?? 'images/default-category.png' }}">
 
-            <div class="card">
-                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135706.png">
-                <h3>Hành chính / Nhân sự</h3>
-                <p>+13524 Việc Làm</p>
+                <div class="info">
+                    <h3>{{ $category->category_name }}</h3>
+                    <p>+{{ $category->jobs_count }} Việc Làm</p>
+                </div>
             </div>
+            @endforeach
 
-            <div class="card">
-                <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png">
-                <h3>Marketing</h3>
-                <p>+14332 Việc Làm</p>
-            </div>
-
-            <div class="card">
-                <img src="https://cdn-icons-png.flaticon.com/512/2921/2921822.png">
-                <h3>Cơ khí</h3>
-                <p>+9565 Việc Làm</p>
-            </div>
-
-            <div class="card">
-                <img src="https://cdn-icons-png.flaticon.com/512/1995/1995574.png">
-                <h3>IT / Phần mềm</h3>
-                <p>+6764 Việc Làm</p>
-            </div>
-
-            <div class="card">
-                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png">
-                <h3>Giáo dục</h3>
-                <p>+3205 Việc Làm</p>
-            </div>
-
-            <div class="card">
-                <img src="https://cdn-icons-png.flaticon.com/512/2966/2966483.png">
-                <h3>Y tế</h3>
-                <p>+5106 Việc Làm</p>
-            </div>
-            <div class="card">
-                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png">
-                <h3>Giáo dục</h3>
-                <p>+3205 Việc Làm</p>
-            </div>
-
-            <div class="card">
-                <img src="https://cdn-icons-png.flaticon.com/512/2966/2966483.png">
-                <h3>Y tế</h3>
-                <p>+5106 Việc Làm</p>
-            </div>
         </div>
-        </div>
+    </div>
     </section>
 
     <section class="process-section">
