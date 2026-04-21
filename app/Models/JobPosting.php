@@ -28,4 +28,8 @@ class JobPosting extends Model
     {
         return $this->belongsTo(Location::class, 'location_id');
     }
+    public function level()
+    {
+        return $this->belongsTo(Level::class, 'level_id');
+    }
 }

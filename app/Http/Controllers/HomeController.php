@@ -19,6 +19,7 @@ class HomeController extends Controller
             ])
             ->where('status', 1)
             ->orderBy('job_id', 'desc')
+            ->limit(8)
             ->get();
 
         //  Danh sách công ty

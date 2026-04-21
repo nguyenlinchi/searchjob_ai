@@ -1,6 +1,9 @@
 @extends('layout.header')
 
 @section('title', 'Search Job')
+@section('styles')
+<link rel="stylesheet" href="{{ asset('css/home.css') }}">
+@endsection
 
 @section('content')
     <div class="banner">
@@ -117,7 +120,9 @@
             <div class="company-big">
                 <img src="{{ $big->avatar ?? 'images/default.png' }}" class="logo">
 
-                <h3>{{ $big->company_name }}</h3>
+                <a href="{{ route('company', $big->employer_id) }}">
+                    <h3>{{ $big->company_name }}</h3>
+                </a> 
                 <p>{{ $big->company_type ?? 'Chưa cập nhật' }}</p>
 
                 <span class="job-count">{{ $big->jobs_count }} việc làm</span>
@@ -139,7 +144,9 @@
                         <img src="{{ $employer->avatar ?? 'images/default.png' }}">
 
                         <div>
-                            <h4>{{ $employer->company_name }}</h4>
+                            <a  href="{{ route('company', $employer->employer_id) }}">
+                                <h4>{{ $employer->company_name }}</h4>
+                            </a>                            
                             <p>{{ $employer->company_type ?? 'Chưa cập nhật' }}</p>
                             <span>{{ $employer->jobs_count }} việc làm</span>
                         </div>
@@ -162,7 +169,9 @@
                 <img src="{{ $employer->avatar ?? 'images/default.png' }}">
 
                 <div>
-                    <h4>{{ $employer->company_name }}</h4>
+                    <a  href="{{ route('company', $employer->employer_id) }}">
+                        <h4>{{ $employer->company_name }}</h4>
+                    </a> 
                     <p>{{ $employer->company_type ?? 'Chưa cập nhật' }}</p>
                     <span>{{ $employer->jobs_count }} việc làm</span>
                 </div>

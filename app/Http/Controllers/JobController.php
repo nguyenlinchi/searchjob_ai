@@ -56,7 +56,7 @@ class JobController extends Controller
 
         $categories = Category::all();
         $salaries = Salary::all();
-         $locations = Location::all(); 
+        $locations = Location::all(); 
 
 
         return view('jobs.index', compact('jobs', 'categories', 'salaries','locations'));
@@ -70,6 +70,12 @@ class JobController extends Controller
                 'location',
             ])->findOrFail($id);
 
-            return view('jobs.show', compact('job'));
+            $relatedJobs = JobPosting::where('category_id', $job->category_id)
+                ->where('job_id', '!=', $job->job_id)
+                ->orderBy('posted_date', 'desc') // ✅ sửa ở đây
+                ->take(4)
+                ->get();
+
+            return view('jobs.show', compact('job','relatedJobs'));
         }
 }

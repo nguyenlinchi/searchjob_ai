@@ -15,11 +15,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\CompanyController;
+
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
 Route::get('/jobs/{id}', [JobController::class, 'show'])->name('jobs.show');
+
+Route::get('/company/{id}', [CompanyController::class, 'show'])
+    ->name('company');
 
 
 

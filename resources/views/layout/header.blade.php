@@ -7,10 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('css/home.css') }}">
         <link rel="stylesheet" href="{{ asset('css/job.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/show.css') }}">
-
-
-
+        @yield('styles')
 
     <!-- Bootstrap + Font -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">

@@ -1,171 +1,236 @@
 @extends('layout.header')
 
 @section('content')
+@section('styles')
+<link rel="stylesheet" href="{{ asset('css/show.css') }}">
+@endsection
 <div class="container mx-auto p-4">
 
-    <!-- BANNER -->
-    <div class="banner-img mb-3">
-        <img src="https://res.cloudinary.com/dumvx2lsj/image/upload/v1755158462/bannerchitiet_mo4rlb.png" 
-             class="w-100 rounded">
+    <div class="banner-img">
+        <img src="https://res.cloudinary.com/dumvx2lsj/image/upload/v1755158462/bannerchitiet_mo4rlb.png" alt="Banner" class="w-full">
     </div>
 
-    <!-- TITLE + APPLY -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="fw-bold">Frontend Developer</h2>
-        <a href="#" class="btn btn-primary">Ứng tuyển</a>
+    <div class="title-apply-container">
+        <h1 class="job-title">{{  $job->job_title }}</h1>
+            @auth
+                <a href="{{ route('profile.apply', $job->id) }}" class="apply-btn">
+                    Ứng tuyển
+                </a>
+            @else
+                <a href="{{ route('login') }}" class="apply-btn">
+                    Nộp hồ sơ
+                </a>
+            @endauth
     </div>
 
-    <!-- INFO -->
-    <div class="d-flex gap-4 mb-3 text-muted">
-        <div>⏰ Fulltime</div>
-        <div>📍 Đà Nẵng</div>
-    </div>
-
-    <!-- CARD -->
-    <div class="row mb-4">
-
-        <!-- LEFT -->
-        <div class="col-md-7">
-            <div class="card p-3 shadow-sm mb-3">
-                <h5 class="text-primary">Thông tin công việc</h5>
-                <p><strong>Công ty:</strong> FPT Software</p>
-                <p><strong>Số lượng:</strong> 5</p>
-                <p><strong>Lương:</strong> 15.000.000 VNĐ</p>
-                <p><strong>Loại hình:</strong> Fulltime</p>
-            </div>
-
-            <div class="card p-3 shadow-sm mb-3">
-                <h5 class="text-primary">Mô tả công việc</h5>
-                <p>
-                    - Phát triển website<br>
-                    - Làm việc với team Backend<br>
-                    - Tối ưu hiệu năng
-                </p>
-            </div>
-
-            <div class="card p-3 shadow-sm mb-3">
-                <h5 class="text-warning">Yêu cầu</h5>
-                <p>
-                    - Biết HTML, CSS, JS<br>
-                    - Có kinh nghiệm React là lợi thế
-                </p>
-            </div>
-
-            <div class="card p-3 shadow-sm">
-                <h5 class="text-success">Quyền lợi</h5>
-                <p>
-                    - Lương thưởng hấp dẫn<br>
-                    - Môi trường năng động
-                </p>
-            </div>
+    <div class="job-info">
+        <div>
+            <i class="fa-solid fa-clock"></i> 
+            <span style="color:#0d6efd; font-weight:500;">{{ $job->deadline ? \Carbon\Carbon::parse($job->deadline)->format('d/m/Y') : '' }}</span>
         </div>
+        <div>
+            @if($job->workplace == 'Online')
+            <i class="fa-solid fa-laptop"></i>
+                @elseif($job->workplace == 'Hybrid')
+                    <i class="fa-solid fa-globe"></i>
+                @else
+                    <i class="fa-solid fa-location-dot"></i>
+                @endif
 
-        <!-- RIGHT -->
-        <div class="col-md-5">
-            <div class="card p-3 shadow-sm mb-3 text-center">
-                <h6 class="text-primary">Nơi làm việc</h6>
-                <p>FPT Software - Đà Nẵng</p>
-            </div>
-
-            <div class="card p-3 shadow-sm">
-                <h6 class="text-primary">Giới thiệu công ty</h6>
-                <p>
-                    FPT Software là công ty công nghệ hàng đầu Việt Nam...
-                </p>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- CONTACT -->
-    <div class="card p-3 shadow-sm mb-4">
-        <h5>Thông tin liên hệ</h5>
-        <p>Email: recruitment@fsoft.com.vn</p>
-        <p>Phone: 0909 999 999</p>
-    </div>
-
-    <!-- COMMENTS -->
-    <div class="card p-3 shadow-sm mb-4">
-        <h5>Bình luận</h5>
-
-        <!-- COMMENT ITEM -->
-        <div class="border p-2 mb-2 rounded">
-            <strong>Nguyễn Văn A</strong>
-            <div class="text-warning">⭐⭐⭐⭐⭐</div>
-            <p>Công việc rất tốt!</p>
-        </div>
-
-        <div class="border p-2 mb-2 rounded">
-            <strong>Trần Thị B</strong>
-            <div class="text-warning">⭐⭐⭐⭐</div>
-            <p>Môi trường ok</p>
+                {{ $job->workplace }}
         </div>
     </div>
 
-    <!-- FORM COMMENT -->
-    <div class="card p-3 shadow-sm">
-        <h5>Viết bình luận</h5>
 
-        <textarea class="form-control mb-2" rows="3" placeholder="Nhập nội dung..."></textarea>
-
-        <!-- STAR -->
-        <div class="mb-2" id="stars">
-            <span class="star">☆</span>
-            <span class="star">☆</span>
-            <span class="star">☆</span>
-            <span class="star">☆</span>
-            <span class="star">☆</span>
+    <div class="card-row">
+        <!-- Card bên trái -->
+        <div class="card-left">
+            <h2 class="font-semibold mb-2">Thông tin công việc</h2>
+            <p><strong>Đơn vị:</strong> {{ $job->employer->company_name ?? 'Chưa cập nhật' }}</p>
+            <p><strong>Số lượng tuyển:</strong> {{ $job->quantity ?? 1 }}</p>
+            <p><strong>Mức lương:</strong> 
+                {{ $job->salary->salary_range ?? 'Thỏa thuận' }}</p>
+            <p><strong>Loại hình:</strong> {{$job->jobType->job_type_name ?? 'Toàn thời gian' }}</p>
         </div>
 
-        <button class="btn btn-primary">Gửi</button>
+        <div class="card-right">
+            <img src="https://res.cloudinary.com/dumvx2lsj/image/upload/v1755165269/chitiet_t86jag.png" alt="Icon">
+            <div class="location-content">
+                <h3 class="font-semibold">Nơi làm việc</h3>
+                
+                <p><i class="fa-solid fa-location-dot"></i>   {{$job->address ?? 'Đà Nẵng' }}</p>
+            </div>
+        </div>
     </div>
+
+    <div class="card-row">
+        <div class="left-content">
+            <div class="job-description">
+                <h2 style="color: #0d6efd;" class="font-semibold mb-2">MÔ TẢ CÔNG VIỆC</h2>
+                {!! nl2br(e($job->job_description)) !!}
+            </div>
+
+            <div class="job-requirements ">
+                <h2 style="color: #ffa805ff;" class="font-semibold mb-2">YÊU CẦU</h2>
+                {!! nl2br(e($job->candidate_requirements)) !!}
+            </div>
+
+            <div class="job-benefits">
+                <h2 style="color: #29fd0dff;" class="font-semibold mb-2">QUYỀN LỢI</h2>
+                {!! nl2br(e($job->benefits)) !!}
+            </div>
+        </div>
+
+        <div class="card-right1 location">
+            <div>
+                <h3 class="font-semibold" style="color: #0d6efd; margin-bottom: 20px;">Giới thiệu về công ty</h3>
+                <p>{{  $job->employer->description ?? 'Chưa có mô tả' }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-map-box">
+
+    <!-- LEFT: CONTACT -->
+        <div class="contact-info">
+            <h2>Thông tin liên hệ</h2>
+            <p><strong>Người phụ trách:</strong> {{ $job->employer->contact_name ?? 'N/A' }}</p>
+            <p><strong>Email:</strong> {{ $job->employer->hr_email ?? 'N/A' }}</p>
+            <p><strong>SĐT:</strong> {{ $job->employer->phone ?? 'N/A' }}</p>
+        </div>
+
+        <!-- RIGHT: MAP -->
+        <div class="map-box">
+
+            @if($job->address)
+                <iframe 
+                    src="https://www.google.com/maps?q={{ urlencode($job->address) }}&output=embed">
+                </iframe>
+            @else
+                <p>Chưa có địa chỉ</p>
+            @endif
+        </div>
+    </div>
+    
+
+   <div class="related-jobs">
+    <h3>Việc làm liên quan</h3>
+
+    <div class="related-grid">
+        @foreach($relatedJobs as $item)
+            <div class="related-card">
+
+                <!-- TITLE -->
+                <h4 class="related-job-title">
+                    {{ $item->job_title }}
+                </h4>
+
+                <!-- INFO -->
+                <div class="job-meta">
+                    <span>💼 {{ $item->jobType->job_type_name ?? 'Fulltime' }}</span>
+                    <span>📍 {{ $item->location->location_name ?? $item->workplace }}</span>
+                </div>
+
+                <!-- DEADLINE -->
+                <div class="job-deadline">
+                    ⏰ Hạn: {{ \Carbon\Carbon::parse($item->deadline)->format('d/m/Y') }}
+                </div>
+
+                <!-- LINE -->
+                <div class="divider"></div>
+
+                <!-- FOOTER -->
+                <div class="job-footer">
+                    <div class="salary">
+                        {{ $item->salary->salary_range ?? 'Thỏa thuận' }}
+                    </div>
+
+                    <a href="{{ route('jobs.show', $item->job_id) }}" class="btn-apply">
+                        Ứng tuyển
+                    </a>
+                </div>
+
+            </div>
+        @endforeach
+    </div>
+</div>
 
 </div>
 
-<!-- SCROLL TOP -->
-<button id="scrollTopBtn">↑</button>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const stars = document.querySelectorAll(".star-rating .star");
+        const input = document.getElementById("satisfaction");
+
+        stars.forEach(star => {
+            star.addEventListener("click", function () {
+                let value = this.getAttribute("data-value");
+                input.value = value;
+
+                
+            // reset hiển thị
+            stars.forEach(s => s.classList.remove("selected"));
+
+            // thêm màu vàng cho sao được chọn
+            for (let i = 0; i < value; i++) {
+                stars[i].classList.add("selected");
+            }
+            });
+        });
+    });
+</script>
+
+<button id="scrollTopBtn">
+  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" viewBox="0 0 24 24">
+    <path d="M12 8l6 6H6z"/>
+  </svg>
+</button>
+
 
 <style>
-.star {
-    font-size: 24px;
-    cursor: pointer;
-}
-.star.active {
-    color: gold;
-}
-
-#scrollTopBtn {
+  #scrollTopBtn {
     position: fixed;
-    bottom: 30px;
-    right: 20px;
-    background: orange;
-    color: white;
+    bottom: 40px; 
+    right: 28px;
+    background: #f88705ff;
+    color: #fff;
     border: none;
     border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    display: none;
-}
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 9997;
+    display: none; /* ẩn mặc định */
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+  #scrollTopBtn:hover {
+    background: #f1d42eff;
+    transform: scale(1.05);
+  }
 </style>
 
 <script>
-// ⭐ STAR
-document.querySelectorAll('.star').forEach((star, index) => {
-    star.addEventListener('click', () => {
-        document.querySelectorAll('.star').forEach((s, i) => {
-            s.classList.toggle('active', i <= index);
-        });
+  document.addEventListener("DOMContentLoaded", function () {
+    const scrollBtn = document.getElementById("scrollTopBtn");
+
+    // Hiện nút khi cuộn xuống 200px
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 200) {
+        scrollBtn.style.display = "flex";
+      } else {
+        scrollBtn.style.display = "none";
+      }
     });
-});
 
-// 🔼 SCROLL TOP
-const btn = document.getElementById("scrollTopBtn");
-
-window.addEventListener("scroll", () => {
-    btn.style.display = window.scrollY > 200 ? "block" : "none";
-});
-
-btn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Sự kiện click -> cuộn lên đầu
+    scrollBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
 </script>
 
 @include('layout.footer')

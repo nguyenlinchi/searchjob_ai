@@ -1,6 +1,9 @@
 @extends('layout.header')
 
 @section('title', 'FPT Software Career')
+@section('styles')
+<link rel="stylesheet" href="{{ asset('css/job.css') }}">
+@endsection
 
 @section('content')
 
