@@ -87,9 +87,58 @@
         <a href="#">Trang chủ</a>
         <a href="{{ route('jobs.index') }}">Việc làm</a>
         <a href="#">CV</a>
-         <a href="#">Cẩm nang nghề nghiệp</a>
-        <a href="{{ route('register') }}">Đăng ký</a>
-        <a href="{{ route('login') }}" class="sign-in">Đăng nhập</a>
+        <a href="{{ route('career.index') }}">Cẩm nang nghề nghiệp</a>
+        @guest
+
+    <!-- Chưa đăng nhập -->
+
+    <a href="{{ route('register') }}"
+       class="{{ request()->routeIs('register') ? 'active-link' : '' }}">
+
+        Đăng ký
+
+    </a>
+
+
+    <a href="{{ route('login') }}"
+       class="sign-in {{ request()->routeIs('login') ? 'active-link' : '' }}">
+
+        Đăng nhập
+
+    </a>
+
+@else
+
+    <!-- Đã đăng nhập -->
+
+    <span class="me-1">
+
+        Xin chào,
+
+        <a href="{{ route('profile') }}">
+
+            <strong>{{ Auth::user()->name }}</strong>
+
+        </a>
+
+    </span>
+
+
+    <form action="{{ route('logout') }}"
+          method="POST"
+          style="display:inline;">
+
+        @csrf
+
+        <button type="submit" class="sign-in">
+
+            Đăng xuất
+
+        </button>
+
+    </form>
+
+@endguest
     </div>
 </div>
 

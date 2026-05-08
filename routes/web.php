@@ -16,31 +16,33 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CareerController;
+use App\Http\Controllers\MbtiController;
+use App\Http\Controllers\ProfileController;
 
 
 
+// Route::get('/', function () {
+//     return view('career.index');
+// });
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
 Route::get('/jobs/{id}', [JobController::class, 'show'])->name('jobs.show');
 
 Route::get('/company/{id}', [CompanyController::class, 'show'])
     ->name('company');
+Route::get('/career', [CareerController::class, 'index'])->name('career.index');
+Route::get('/career/{id}', [CareerController::class, 'show'])->name('career.show');
+Route::get('/career/search', [CareerController::class, 'search']);
+Route::get('/mbti-test', [MbtiController::class, 'index'])->name('career.test');
 
-
-
-// form
-Route::get('/login', function () {
-    return view('auth.login');
-});
-
-Route::get('/register', function () {
-    return view('auth.register');
-});
 
 
 // LOGIN
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/candidate/home', [HomeController::class, 'index'])
+    ->name('candidate.home');
 
 // REGISTER
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -60,4 +62,30 @@ Route::get('/employer', function () {
 
 Route::get('/candidate', function () {
     return "Trang CANDIDATE";
+});
+Route::middleware('auth')->group(function () {
+
+    Route::get('/profile', [ProfileController::class, 'index'])
+        ->name('profile');
+
+    Route::post('/profile/update', [ProfileController::class, 'update'])
+        ->name('profile.update');
+
+    Route::get('/profile/apply/{id}', [ProfileController::class, 'apply'])
+        ->name('profile.apply');
+    Route::post('/profile/apply/{id}',[ProfileController::class, 'storeApply']
+    )->name('profile.storeApply');
+    Route::delete('/application/delete/{id}',[ProfileController::class, 'deleteApplication'])
+    ->name('application.delete');
+
+
+
+
+
+    Route::get('/resume/create', [ProfileController::class, 'createResume'])
+        ->name('resume.create');
+
+    Route::post('/resume/store', [ProfileController::class, 'storeResume'])
+        ->name('resume.store');
+
 });

@@ -44,6 +44,6 @@ class HomeController extends Controller
                 ->get();
 
         // ✅ CHỈ return 1 lần
-        return view('home', compact('jobs', 'topEmployers', 'otherEmployers','categories'));
+        return view('candidate/home', compact('jobs', 'topEmployers', 'otherEmployers','categories'));
     }
 }

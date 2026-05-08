@@ -2,7 +2,7 @@
 
 @section('content')
 @section('styles')
-<link rel="stylesheet" href="{{ asset('css/show.css') }}">
+<link rel="stylesheet" href="{{ asset('css/showjobs.css') }}">
 @endsection
 <div class="container mx-auto p-4">
 
@@ -13,7 +13,7 @@
     <div class="title-apply-container">
         <h1 class="job-title">{{  $job->job_title }}</h1>
             @auth
-                <a href="{{ route('profile.apply', $job->id) }}" class="apply-btn">
+                <a  class="apply-btn">
                     Ứng tuyển
                 </a>
             @else
@@ -46,11 +46,16 @@
         <!-- Card bên trái -->
         <div class="card-left">
             <h2 class="font-semibold mb-2">Thông tin công việc</h2>
-            <p><strong>Đơn vị:</strong> {{ $job->employer->company_name ?? 'Chưa cập nhật' }}</p>
-            <p><strong>Số lượng tuyển:</strong> {{ $job->quantity ?? 1 }}</p>
-            <p><strong>Mức lương:</strong> 
-                {{ $job->salary->salary_range ?? 'Thỏa thuận' }}</p>
-            <p><strong>Loại hình:</strong> {{$job->jobType->job_type_name ?? 'Toàn thời gian' }}</p>
+
+            <div class="job-info-grid">
+                <p><strong>Đơn vị:</strong> {{ $job->employer->company_name ?? 'Chưa cập nhật' }}</p>
+                <p><strong>Số lượng:</strong> {{ $job->quantity ?? 1 }}</p>
+
+                <p><strong>Mức lương:</strong> {{ $job->salary->salary_range ?? 'Thỏa thuận' }}</p>
+                <p><strong>Loại hình:</strong> {{ $job->jobType->job_type_name ?? 'Toàn thời gian' }}</p>
+
+                <p><strong>Giới tính:</strong> {{ $job->gender_requirement ?? 'Không yêu cầu' }}</p>
+            </div>
         </div>
 
         <div class="card-right">
@@ -64,26 +69,35 @@
     </div>
 
     <div class="card-row">
+       <!-- LEFT -->
         <div class="left-content">
-            <div class="job-description">
-                <h2 style="color: #0d6efd;" class="font-semibold mb-2">MÔ TẢ CÔNG VIỆC</h2>
-                {!! nl2br(e($job->job_description)) !!}
+
+            <div class="section-card">
+                <h2 class="section-title blue">Mô tả công việc</h2>
+                <div class="section-content">
+                    {!! nl2br(e($job->job_description)) !!}
+                </div>
             </div>
 
-            <div class="job-requirements ">
-                <h2 style="color: #ffa805ff;" class="font-semibold mb-2">YÊU CẦU</h2>
-                {!! nl2br(e($job->candidate_requirements)) !!}
+            <div class="section-card">
+                <h2 class="section-title orange">Yêu cầu</h2>
+                <div class="section-content">
+                    {!! nl2br(e($job->candidate_requirements)) !!}
+                </div>
             </div>
 
-            <div class="job-benefits">
-                <h2 style="color: #29fd0dff;" class="font-semibold mb-2">QUYỀN LỢI</h2>
-                {!! nl2br(e($job->benefits)) !!}
+            <div class="section-card">
+                <h2 class="section-title green">Quyền lợi</h2>
+                <div class="section-content">
+                    {!! nl2br(e($job->benefits)) !!}
+                </div>
             </div>
+
         </div>
 
         <div class="card-right1 location">
             <div>
-                <h3 class="font-semibold" style="color: #0d6efd; margin-bottom: 20px;">Giới thiệu về công ty</h3>
+                <h3 class="font-semibold" style="color: #173c74; margin-bottom: 20px;">Giới thiệu về công ty</h3>
                 <p>{{  $job->employer->description ?? 'Chưa có mô tả' }}</p>
             </div>
         </div>
@@ -153,7 +167,12 @@
             </div>
         @endforeach
     </div>
-</div>
+    <div class="view-more-wrap">
+        <a href="{{ route('jobs.index') }}" class="btn-view-more">
+            Xem thêm việc làm
+        </a>
+    </div>
+ </div>
 
 </div>
 

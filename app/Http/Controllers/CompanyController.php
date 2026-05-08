@@ -46,6 +46,6 @@ class CompanyController extends Controller
         // 🔹 Danh sách địa điểm
         $locations = Location::all();
 
-        return view('company', compact('company', 'jobs', 'locations'));
+        return view('candidate/company', compact('company', 'jobs', 'locations'));
     }
 }

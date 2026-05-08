@@ -27,4 +27,12 @@ class Account extends Authenticatable
     public function role() {
         return $this->belongsTo(Role::class, 'role_id');
     }
+    public function candidate()
+{
+    return $this->hasOne(
+        Candidate::class,
+        'account_id',
+        'account_id'
+    );
+}
 }

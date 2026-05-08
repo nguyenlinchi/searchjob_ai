@@ -74,7 +74,7 @@ class AuthController extends Controller
             } elseif ($role == 'EMPLOYER') {
                 return redirect('/employer');
             } else {
-                return redirect('/candidate');
+                return redirect('/candidate/home');
             }
         }
 

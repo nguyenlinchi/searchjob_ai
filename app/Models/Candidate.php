@@ -21,4 +21,22 @@ class Candidate extends Model
         'cover_image',
         'address'
     ];
+    public function resumes()
+    {
+        return $this->hasMany(
+            Resume::class,
+            'candidate_id',
+            'candidate_id'
+        );
+    }
+
+
+    public function applications()
+    {
+        return $this->hasMany(
+            Application::class,
+            'candidate_id',
+            'candidate_id'
+        );
+    }
 }

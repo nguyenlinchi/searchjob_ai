@@ -90,7 +90,16 @@
                         {{ $job->salary->salary_range ?? 'Thỏa thuận' }}
                     </span>
 
-                    <a href="#" class="apply-btn">Ứng tuyển</a>
+            @auth
+                <a href="{{ route('profile.apply', $job->job_id) }}" class="apply-btn">
+                    Ứng tuyển ngay
+                </a>
+            @else
+                <a href="{{ route('login') }}"
+                class="apply-btn">
+                    Đăng nhập
+                </a>
+            @endauth
                 </div>
             </div>
         </div>

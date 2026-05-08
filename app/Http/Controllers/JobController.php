@@ -59,7 +59,7 @@ class JobController extends Controller
         $locations = Location::all(); 
 
 
-        return view('jobs.index', compact('jobs', 'categories', 'salaries','locations'));
+        return view('candidate/jobs.index', compact('jobs', 'categories', 'salaries','locations'));
     }
     public function show($id)
         {
@@ -76,6 +76,6 @@ class JobController extends Controller
                 ->take(4)
                 ->get();
 
-            return view('jobs.show', compact('job','relatedJobs'));
+            return view('candidate/jobs.show', compact('job','relatedJobs'));
         }
 }

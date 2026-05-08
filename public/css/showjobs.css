@@ -10,8 +10,10 @@
     width: 100%;
     height: 180px;
     display: block;
-    border-radius: 1rem;  /* bo tròn góc ảnh */
+    border-radius: 1rem;
+    margin-top: 50px;
 }
+
 
 /* Job Info */
 .job-info {
@@ -70,7 +72,9 @@
     gap: 1.5rem;
     margin-top: 1.5rem;
     flex-wrap: wrap; /* responsive */
+    align-items: flex-start;
 }
+
 
 /* Card bên trái */
 .card-left {
@@ -80,6 +84,44 @@
     border-radius: 0.5rem;
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     min-width: 250px;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+    transition: 0.3s;
+}
+/* hover nhẹ cho xịn */
+.card-left:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+}
+.job-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 🔥 2 cột */
+    gap: 12px 30px;
+}
+
+/* style từng dòng */
+.job-info-grid p {
+    margin: 0;
+    padding: 8px 0;
+    border-bottom: 1px dashed #eee;
+}
+.card-left h2 {
+    position: relative;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.card-left h2::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 600px;              /* độ dài gạch */
+    height: 1px;
+    background: linear-gradient(90deg, #8e939c, #4f46e5);
+    border-radius: 2px;
 }
 
 .card-right {
@@ -160,7 +202,31 @@
     flex: 2;          
     min-width: 300px; 
 }
+/* SECTION TITLE */
+.left-content h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    position: relative;
+}
 
+.left-content h2::before {
+    content: "";
+    width: 4px;
+    height: 20px;
+    background: #2563eb;
+    position: absolute;
+    left: -10px;
+    top: 3px;
+}
+/* CONTENT BOX */
+.job-description,
+.job-requirements,
+.job-benefits {
+    background: #f9fafb;
+    padding: 15px;
+    border-radius: 12px;
+}
 
 .card-right1 {
     flex: 1;                    
@@ -239,6 +305,76 @@
 .job-benefits {
   margin-top: 20px; /* cách phần trên 20px */
 }
+/* LAYOUT 7:3 */
+.job-section {
+    display: grid;
+    grid-template-columns: 7fr 3fr;
+    gap: 24px;
+    margin-top: 24px;
+}
+
+/* CARD CHUNG */
+.section-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.section-card:hover {
+    transform: translateY(-3px);
+}
+
+/* TITLE */
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    position: relative;
+    padding-left: 12px;
+}
+
+/* line bên trái */
+.section-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 4px;
+    height: 18px;
+    border-radius: 2px;
+}
+
+/* màu từng section */
+.section-title.blue::before {
+    background: #2563eb;
+}
+.section-title.orange::before {
+    background: #f59e0b;
+}
+.section-title.green::before {
+    background: #22c55e;
+}
+
+/* CONTENT */
+.section-content {
+    color: #374151;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+
+
+
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .job-section {
+        grid-template-columns: 1fr;
+    }
+}
 /* KHUNG CHUNG */
 .contact-map-box {
     display: flex;
@@ -290,7 +426,7 @@
     border: 1px solid #e5e7eb;
     border-radius: 16px;
     padding: 18px;
-    background: #ffffff;
+    background: #a3c9ff;
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -350,7 +486,7 @@
     flex: 1;                /* 🔥 cho phép co */
     font-weight: 600;
     color: #2563eb;
-    font-size: 14px;
+    font-size: 16px;
 
     white-space: nowrap;
     overflow: hidden;
@@ -362,10 +498,10 @@
     flex-shrink: 0;         /* 🔥 không bị ép xuống */
     padding: 5px 10px;
     border-radius: 20px;
-    background: #e5e7eb;
-    color: #374151;
+    background: #ec700b;
+    color: #feffff;
     text-decoration: none;
-    font-size: 12px;
+    font-size: 15px;
 }
 
 /* HOVER BUTTON */
@@ -391,4 +527,27 @@
     .related-grid {
         grid-template-columns: 1fr;
     }
+}
+/* WRAP */
+.view-more-wrap {
+    text-align: center;
+    margin-top: 25px;
+}
+
+/* BUTTON */
+.btn-view-more {
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+/* HOVER */
+.btn-view-more:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
