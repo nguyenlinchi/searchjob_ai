@@ -157,6 +157,69 @@
         }
     });
 </script>
+<script>
+
+document.querySelectorAll('.save-job-btn').forEach(button => {
+
+    button.addEventListener('click', function () {
+
+        let jobId = this.dataset.jobId;
+
+        let btn = this;
+
+        fetch(`/save-job/${jobId}`, {
+
+            method: 'POST',
+
+            headers: {
+                'X-CSRF-TOKEN':
+                    document.querySelector(
+                        'meta[name="csrf-token"]'
+                    ).content,
+
+                'Accept': 'application/json'
+            }
+
+        })
+
+        .then(response => response.json())
+
+        .then(data => {
+
+            // CHƯA LOGIN
+            if(data.status === 'login_required'){
+
+                window.location.href = "/login";
+                return;
+            }
+
+            let icon = btn.querySelector('i');
+
+            // SAVE
+            if(data.status === 'saved'){
+
+                btn.classList.add('saved');
+
+                icon.classList.remove('fa-regular');
+                icon.classList.add('fa-solid');
+            }
+
+            // REMOVE
+            if(data.status === 'removed'){
+
+                btn.classList.remove('saved');
+
+                icon.classList.remove('fa-solid');
+                icon.classList.add('fa-regular');
+            }
+
+        });
+
+    });
+
+});
+
+</script>
 
 </body>
 </html>

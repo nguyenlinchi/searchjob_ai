@@ -151,7 +151,7 @@
   padding: 20px;
   aspect-ratio: 1 / 1;
   display: flex;
-  flex-direction: column; /* giữ nguyên */
+  flex-direction: column; 
   background: white;
   box-sizing: border-box;
 }
@@ -160,38 +160,147 @@
     font-weight: 600;
     line-height: 1.4;
 
-    height: 2.8em;               /* 2 dòng */
+    height: 2.8em;               
     overflow: hidden;
 
-    display: block;              /* 👉 bỏ -webkit-box nếu bị lỗi */
+    display: block;             
 }
 
-/* HÀNG TRÊN */
-.job-top {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
+
+.job-top{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
 }
 
-/* LOGO */
-.job-logo img {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;   /* viền xám nhẹ */
-  padding: 5px;                /* tạo khoảng cách logo với viền */
-  background: #fff; 
+
+.job-logo{
+    flex-shrink:0;
 }
 
-/* TEXT */
-.job-info {
-  flex: 1;
+.job-logo img{
+    width:80px;
+    height:80px;
+    object-fit:contain;
+    border-radius:10px;
+    border:1px solid #e5e7eb;
+    padding:5px;
+    background:#fff;
 }
 
-.job-info h5 {
-  margin: 0;
-  font-size: 16px;
+
+.job-info{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+}
+
+
+.job-info h5{
+    margin:0;
+    min-height:48px; 
+    line-height:1.5;
+    display:flex;
+    align-items:flex-start;
+    gap:6px;
+}
+
+
+.job-title{
+    text-decoration:none;
+    color:#111827;
+    font-size:16px;
+    font-weight:600;
+    text-align:left;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+}
+
+.job-title:hover{
+    color:#2563eb;
+}
+
+
+.job-info span{
+    text-align:left;
+}
+
+
+
+.save-job-btn{
+    width:38px;
+    height:38px;
+
+    border:none;
+    border-radius:50%;
+
+    background:#f3f4f6;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    transition:all 0.3s ease;
+}
+
+
+.save-job-btn i{
+    font-size:18px;
+    color:#9ca3af;
+    transition:all 0.3s ease;
+}
+
+
+.save-job-btn:hover{
+    background:#fee2e2;
+    transform:translateY(-2px);
+}
+
+.save-job-btn:hover i{
+    color:#ef4444;
+}
+
+
+.save-job-btn.saved{
+    background:#ef4444;
+    box-shadow:0 4px 12px rgba(239,68,68,0.3);
+}
+
+.save-job-btn.saved i{
+    color:#fff;
+}
+
+
+.save-job-btn:active{
+    transform:scale(0.95);
+}
+.job-info h5{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.job-title{
+    flex:1;
+}
+
+
+.save-job-btn{
+    margin-left:auto;
+    flex-shrink:0;
+}
+.job-deadline{
+    white-space: nowrap;
+    display: inline-block;
+    margin-top: 4px;
+    color: #6b7280;
+    font-size: 14px;
 }
 
 .job-footer {
@@ -222,13 +331,14 @@
   border-radius: 8px;
   font-size: 14px;
 }
-.divider {
-  display: inline-block;
-  height: 3px;
-  background-color: #fd7f09;
-  width: 200px; 
-  margin: 40px 10px 0 30px; 
-  vertical-align: middle;
+.divider{
+    display:block;
+    width:100%;
+    max-width:200px;
+    height:3px;
+    background:#fd7f09;
+    margin:20px auto;
+    border-radius:10px;
 }
 
 

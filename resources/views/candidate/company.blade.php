@@ -185,9 +185,14 @@
                     </div>
                     <span class="divider"></span>
 
-                    @if($job->address)
+                    @if($company->location)
                         <iframe 
-                            src="https://www.google.com/maps?q={{ urlencode($job->address) }}&output=embed">
+                            width="100%"
+                            height="250"
+                            style="border:0;"
+                            loading="lazy"
+                            allowfullscreen
+                            src="https://www.google.com/maps?q={{ urlencode($company->location) }}&output=embed">
                         </iframe>
                     @else
                         <p>Chưa có địa chỉ</p>

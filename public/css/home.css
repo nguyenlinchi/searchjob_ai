@@ -230,9 +230,70 @@
 }
 
 
-.job-icon {
-  color: orange;
-  font-size: 1.2rem;
+.save-job-btn{
+    width:38px;
+    height:38px;
+
+    border:none;
+    border-radius:50%;
+
+    background:#f3f4f6;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    transition:all 0.3s ease;
+}
+
+
+.save-job-btn i{
+    font-size:18px;
+    color:#9ca3af;
+    transition:all 0.3s ease;
+}
+
+
+.save-job-btn:hover{
+    background:#fee2e2;
+    transform:translateY(-2px);
+}
+
+.save-job-btn:hover i{
+    color:#ef4444;
+}
+
+
+.save-job-btn.saved{
+    background:#ef4444;
+    box-shadow:0 4px 12px rgba(239,68,68,0.3);
+}
+
+.save-job-btn.saved i{
+    color:#fff;
+}
+
+
+.save-job-btn:active{
+    transform:scale(0.95);
+}
+.job-info h5{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.job-title{
+    flex:1;
+}
+
+
+.save-job-btn{
+    margin-left:auto;
+    flex-shrink:0;
 }
 
 .job-deadline {

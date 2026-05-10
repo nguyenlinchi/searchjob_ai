@@ -11,35 +11,64 @@
     </div>
 
     <div class="title-apply-container">
-        <h1 class="job-title">{{  $job->job_title }}</h1>
+
+    <h1 class="job-title">
+        {{ $job->job_title }}
+    </h1>
+
+        <div class="job-action-group">
+
+            @include('components.save-job-button')
+
             @auth
-                <a  class="apply-btn">
+                <a href="{{ route('profile.apply', $job->job_id) }}"
+                class="apply-btn">
                     Ứng tuyển
                 </a>
             @else
-                <a href="{{ route('login') }}" class="apply-btn">
+                <a href="{{ route('login') }}"
+                class="apply-btn">
                     Nộp hồ sơ
                 </a>
             @endauth
+        </div>
+    </div>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <div class="job-detail-info">
+
+    <div class="info-item">
+        <i class="fa-solid fa-clock"></i>
+
+        <span>
+            {{ $job->deadline
+                ? \Carbon\Carbon::parse($job->deadline)->format('d/m/Y')
+                : ''
+            }}
+        </span>
     </div>
 
-    <div class="job-info">
-        <div>
-            <i class="fa-solid fa-clock"></i> 
-            <span style="color:#0d6efd; font-weight:500;">{{ $job->deadline ? \Carbon\Carbon::parse($job->deadline)->format('d/m/Y') : '' }}</span>
-        </div>
-        <div>
-            @if($job->workplace == 'Online')
+    <div class="info-item">
+
+        @if($job->workplace == 'Online')
+
             <i class="fa-solid fa-laptop"></i>
-                @elseif($job->workplace == 'Hybrid')
-                    <i class="fa-solid fa-globe"></i>
-                @else
-                    <i class="fa-solid fa-location-dot"></i>
-                @endif
 
-                {{ $job->workplace }}
-        </div>
+        @elseif($job->workplace == 'Hybrid')
+
+            <i class="fa-solid fa-globe"></i>
+
+        @else
+
+            <i class="fa-solid fa-location-dot"></i>
+
+        @endif
+
+        <span>{{ $job->workplace }}</span>
+
     </div>
+
+</div>
 
 
     <div class="card-row">

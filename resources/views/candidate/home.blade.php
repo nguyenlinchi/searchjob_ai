@@ -16,23 +16,26 @@
         <h1>Khai phóng sự nghiệp</h1>
         <p>cùng chúng tôi</p>
 
-        <form action="#" method="GET" class="search-box d-flex flex-wrap gap-2">
-            
-            <select name="job_category_id">
-                <option value="">Ngành nghề</option>
-                <option value="1">Công nghệ thông tin</option>
-                <option value="2">Kinh doanh</option>
-                <option value="3">Marketing</option>
-                <option value="4">Nhân sự</option>
-            </select>
+        <form action="{{ route('home') }}" method="GET" class="search-box d-flex flex-wrap gap-2">
 
-            <input type="text" name="title" placeholder="Vị trí, chức danh..." value="{{ request('title') }}">
+            <input type="text"
+                name="location"
+                placeholder="Địa điểm làm việc..."
+                value="{{ request('location') }}">
+
+            <input type="text"
+                name="title"
+                placeholder="Vị trí, chức danh..."
+                value="{{ request('title') }}">
 
             <button type="submit">
-            🔍 Tìm kiếm
+                🔍 Tìm kiếm
             </button>
 
-            <a href="#" class="btn-reset">Xóa</a>
+            <a href="{{ route('home') }}" class="btn-reset">
+                Xóa
+            </a>
+
         </form>
         </div>
     </div>
@@ -60,13 +63,13 @@
                 <!-- CONTENT -->
                 <div class="job-info">
                     <h5>
-                        <a href="#">{{ $job->job_title }}</a>
-                        <span class="job-icon">⚡</span>
+                        <a href="{{ route('jobs.show', $job->job_id) }}" style="text-decoration:none; color:inherit;">{{ $job->job_title }}</a>
+                       @include('components.save-job-button')
                     </h5>
 
-                    <span>
-                        {{ $job->employer->company_name ?? 'Chưa có công ty' }}
-                    </span><br>
+                    <a href="{{ route('company', $job->employer_id) }}" class="company-link" style="text-decoration:none; color:inherit;">
+                    {{ $job->employer->company_name ?? 'Chưa có công ty' }}
+                    </a><br>
 
                     <span class="job-deadline">
                         Thời hạn: 
@@ -129,7 +132,7 @@
             <div class="company-big">
                 <img src="{{ $big->avatar ?? 'images/default.png' }}" class="logo">
 
-                <a href="{{ route('company', $big->employer_id) }}">
+                <a href="{{ route('company', $big->employer_id) }}" style="text-decoration:none; color:inherit;">
                     <h3>{{ $big->company_name }}</h3>
                 </a> 
                 <p>{{ $big->company_type ?? 'Chưa cập nhật' }}</p>
@@ -153,7 +156,7 @@
                         <img src="{{ $employer->avatar ?? 'images/default.png' }}">
 
                         <div>
-                            <a  href="{{ route('company', $employer->employer_id) }}">
+                            <a  href="{{ route('company', $employer->employer_id) }}" style="text-decoration:none; color:inherit;">
                                 <h4>{{ $employer->company_name }}</h4>
                             </a>                            
                             <p>{{ $employer->company_type ?? 'Chưa cập nhật' }}</p>
@@ -178,7 +181,7 @@
                 <img src="{{ $employer->avatar ?? 'images/default.png' }}">
 
                 <div>
-                    <a  href="{{ route('company', $employer->employer_id) }}">
+                    <a  href="{{ route('company', $employer->employer_id) }}"  style="text-decoration:none; color:inherit;">
                         <h4>{{ $employer->company_name }}</h4>
                     </a> 
                     <p>{{ $employer->company_type ?? 'Chưa cập nhật' }}</p>
@@ -394,49 +397,51 @@
             <h2>Blog & Tài nguyên</h2>
             <p>Góc chia sẻ từ chuyên gia để bứt phá sự nghiệp của bạn</p>
             </div>
-            <a href="#" class="view-all">Xem tất cả →</a>
+            <a href="{{ route('career.index') }}" class="view-all" style="text-decoration:none; color:inherit;">Xem tất cả →</a>
         </div>
 
         <div class="blog-grid">
 
-            <!-- Card 1 -->
+            @foreach($guides as $item)
+
             <div class="blog-card">
-            <div class="blog-image">
-                <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a" alt="">
-                <span class="tag">#Career</span>
-            </div>
-            <div class="blog-content">
-                <h3>Cách viết CV vượt qua mọi bộ lọc AI hiện nay</h3>
-                <p>Bí quyết giúp hồ sơ của bạn lọt vào mắt xanh của robot tuyển dụng...</p>
-                <a href="#">Đọc tiếp →</a>
-            </div>
+
+                <div class="blog-image">
+                    <img src="{{ $item->thumbnail }}" alt="">
+
+                    <span class="tag">
+                        #{{ $item->category->name ?? 'Career' }}
+                    </span>
+                </div>
+
+                <div class="blog-content">
+
+                    <h3>
+                        {{ $item->title }}
+                    </h3>
+
+                    <p>
+                        {{ $item->summary }}
+                    </p>
+
+                    {{-- TAGS --}}
+                    <div class="tags">
+
+                        @foreach($item->tags as $tag)
+                            <span>#{{ $tag->name }}</span>
+                        @endforeach
+
+                    </div>
+
+                    <a href="{{ route('career.show', $item->guide_id) }}">
+                        Đọc tiếp →
+                    </a>
+
+                </div>
+
             </div>
 
-            <!-- Card 2 -->
-            <div class="blog-card">
-            <div class="blog-image">
-                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c" alt="">
-                <span class="tag">#IT Trends</span>
-            </div>
-            <div class="blog-content">
-                <h3>Xu hướng tuyển dụng ngành IT năm 2026 có gì mới?</h3>
-                <p>Khám phá những công nghệ và vị trí đang “khát” nhân lực nhất...</p>
-                <a href="#">Đọc tiếp →</a>
-            </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="blog-card">
-            <div class="blog-image">
-                <img src="https://images.unsplash.com/photo-1581090700227-1e8a9d3b1c74" alt="">
-                <span class="tag">#Skills</span>
-            </div>
-            <div class="blog-content">
-                <h3>Bộ câu hỏi phỏng vấn “xương” nhất cho sinh viên mới</h3>
-                <p>Chuẩn bị tâm lý và cách trả lời thông minh để chinh phục nhà tuyển dụng...</p>
-                <a href="#">Đọc tiếp →</a>
-            </div>
-            </div>
+            @endforeach
 
         </div>
     </section>
@@ -456,7 +461,7 @@
     </section>
 
 
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {

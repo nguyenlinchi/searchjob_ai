@@ -39,4 +39,12 @@ class Candidate extends Model
             'candidate_id'
         );
     }
+    public function savedJobs()
+    {
+        return $this->hasMany(
+            SavedJob::class,
+            'candidate_id',
+            'candidate_id'
+        );
+    }
 }

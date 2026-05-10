@@ -32,4 +32,12 @@ class JobPosting extends Model
     {
         return $this->belongsTo(Level::class, 'level_id');
     }
+    public function savedBy()
+    {
+        return $this->hasMany(
+            SavedJob::class,
+            'job_id',
+            'job_id'
+        );
+    }
 }

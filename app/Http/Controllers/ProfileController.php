@@ -9,63 +9,53 @@ use App\Models\Candidate;
 use App\Models\Resume;
 use App\Models\Application;
 use App\Models\JobPosting;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use App\Models\SavedJob;
+use App\Helpers\SavedJobHelper;
 
 
 class ProfileController extends Controller
 {
 
-    // ================= PROFILE =================
-
     public function index()
-    {
+{
+    $user = Auth::user();
 
-        $user = Auth::user();
+    $candidate = Candidate::where('account_id', $user->account_id)->first();
 
+    $resumes = collect();
+    $applications = collect();
+    $jobs = collect();
+    $savedJobIds = [];
 
-        $candidate = Candidate::where(
-            'account_id',
-            $user->account_id
-        )
-        ->first();
+    if ($candidate) {
 
+        $resumes = Resume::where('candidate_id', $candidate->candidate_id)->get();
 
-        // ===== RESUMES =====
-
-        $resumes = [];
-
-        // ===== APPLICATIONS =====
-
-        $applications = [];
-
-
-        if ($candidate) {
-
-            $resumes = Resume::where(
-                'candidate_id',
-                $candidate->candidate_id
-            )->get();
-
-
-            $applications = Application::where(
-                'candidate_id',
-                $candidate->candidate_id
-            )
+        $applications = Application::where('candidate_id', $candidate->candidate_id)
             ->with('job')
-            ->orderBy('application_id', 'DESC')
+            ->latest('application_id')
             ->get();
-        }
 
+        $savedJobIds = SavedJob::where('candidate_id', $candidate->candidate_id)
+            ->pluck('job_id')
+            ->toArray();
 
-        return view(
-            'candidate/profile.index',
-            compact(
-                'user',
-                'candidate',
-                'resumes',
-                'applications'
-            )
-        );
+        
+        $jobs = JobPosting::with(['employer', 'jobType', 'location', 'salary'])
+            ->whereIn('job_id', $savedJobIds)
+            ->get();
     }
+
+    return view('candidate.profile.index', compact(
+        'user',
+        'candidate',
+        'resumes',
+        'applications',
+        'jobs',
+        'savedJobIds'
+    ));
+}
 
 
 
@@ -73,101 +63,61 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
-
         $request->validate([
-
-            'full_name' => 'required|max:100',
-
-            'phone' => 'nullable|max:15',
-
-            'gender' => 'nullable|max:10',
-
+            'full_name'     => 'required|max:100',
+            'phone'         => 'nullable|max:15',
+            'gender'        => 'nullable|max:10',
             'date_of_birth' => 'nullable|date',
-
-            'address' => 'nullable|max:255',
-
-            'avatar' => 'nullable|image',
-
-            'cover_image' => 'nullable|image'
-
+            'address'       => 'nullable|max:255',
+            'avatar'        => 'nullable|image',
+            'cover_image'   => 'nullable|image'
         ]);
 
-
         $user = Auth::user();
-
 
         $candidate = Candidate::where(
             'account_id',
             $user->account_id
         )->first();
 
-
         if (!$candidate) {
-
             $candidate = new Candidate();
-
-            $candidate->account_id =
-                $user->account_id;
+            $candidate->account_id = $user->account_id;
         }
 
-
-
-        $candidate->full_name =
-            $request->full_name;
-
-        $candidate->phone =
-            $request->phone;
-
-        $candidate->gender =
-            $request->gender;
-
-        $candidate->date_of_birth =
-            $request->date_of_birth;
-
-        $candidate->address =
-            $request->address;
-
-
+        $candidate->full_name     = $request->full_name;
+        $candidate->phone         = $request->phone;
+        $candidate->gender        = $request->gender;
+        $candidate->date_of_birth = $request->date_of_birth;
+        $candidate->address       = $request->address;
 
         // ===== AVATAR =====
-
         if ($request->hasFile('avatar')) {
 
-            $file = $request->file('avatar');
+            $avatarUrl = Cloudinary::upload(
+                $request->file('avatar')->getRealPath(),
+                [
+                    'folder' => 'avatars'
+                ]
+            )->getSecurePath();
 
-            $avatarName = time() . '_avatar.' .
-                $file->getClientOriginalExtension();
-
-            $file->move(
-                public_path('uploads/avatar'),
-                $avatarName
-            );
-
-            $candidate->avatar = $avatarName;
+            $candidate->avatar = $avatarUrl;
         }
-
-
 
         // ===== COVER IMAGE =====
-
         if ($request->hasFile('cover_image')) {
 
-            $file = $request->file('cover_image');
+            $coverUrl = Cloudinary::upload(
+                $request->file('cover_image')->getRealPath(),
+                [
+                    'folder' => 'covers'
+                ]
+            )->getSecurePath();
 
-            $coverName = time() . '_cover.' .
-                $file->getClientOriginalExtension();
-
-            $file->move(
-                public_path('uploads/cover'),
-                $coverName
-            );
-
-            $candidate->cover_image = $coverName;
+            $candidate->cover_image = $coverUrl;
         }
 
-
         $candidate->save();
-
 
         return back()->with(
             'success',

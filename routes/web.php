@@ -19,6 +19,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CareerController;
 use App\Http\Controllers\MbtiController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SavedJobController;
 
 
 
@@ -89,3 +90,12 @@ Route::middleware('auth')->group(function () {
         ->name('resume.store');
 
 });
+Route::post(
+    '/save-job/{id}',
+    [SavedJobController::class, 'toggle']
+)->name('save.job');
+
+Route::get(
+    '/saved-jobs',
+    [SavedJobController::class, 'index']
+)->name('saved.jobs');

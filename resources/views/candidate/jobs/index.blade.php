@@ -127,7 +127,7 @@
                                             <a class="job-title" href="{{ route('jobs.show', $job->job_id) }}">
                                                 {{ $job->job_title }}
                                             </a>
-                                            <span class="job-icon">⚡</span>
+                                            @include('components.save-job-button')
                                         </h5>
 
                                         <span>
@@ -196,6 +196,8 @@
             Chúng tôi không thu bất kì chi phí nào của ứng viên
         </div>
     </div>
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <script>
 function submitFilterForm() {
