@@ -25,4 +25,9 @@ class Employer extends Model
     {
         return $this->hasMany(JobPosting::class, 'employer_id');
     }
+     // account
+    public function account()
+    {
+        return $this->belongsTo(Account::class, 'account_id');
+    }
 }

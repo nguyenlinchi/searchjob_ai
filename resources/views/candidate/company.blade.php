@@ -72,7 +72,7 @@
             <div class="content-box">
 
                 <div class="section-box">
-                    <h3>Ung tuyển</h3>
+                    <h3>Ứng tuyển</h3>
                     <div class="recruitment-section">
                         <!-- SEARCH -->
                         <form method="GET" action="{{ route('company', $company->employer_id) }}">
@@ -113,10 +113,20 @@
 
                                     <!-- TITLE -->
                                     <h4 class="job-title">
-                                        {{ $job->job_title }}
-                                        <span class="verify">✔</span>
-                                        <span>({{ $job->level->level_name }})</span>
-                                    </h4>
+
+    <a href="{{ route('jobs.show', $job->job_id) }}"
+       class="job-link"
+       style="text-decoration:none; color:inherit;">
+
+        {{ $job->job_title }}
+
+    </a>
+
+    <span class="verify">✔</span>
+
+    <span>({{ $job->level->level_name ?? 'Chưa cập nhật' }})</span>
+
+</h4>
 
                                     <!-- TAGS -->
                                     <div class="job-tags">
@@ -148,7 +158,17 @@
 
                                     <!-- DÒNG 1 -->
                                     <div class="top-row">
-                                        <span class="badge-pro">Ứng tuyển</span>
+                                        <!-- <span class="badge-pro">Ứng tuyển</span> -->
+                                         @auth
+                                            <a href="{{ route('profile.apply', $job->job_id) }}" class="badge-pro">
+                                                Ứng tuyển 
+                                            </a>
+                                        @else
+                                            <a href="{{ route('login') }}"
+                                            class="badge-pro">
+                                                Đăng nhập
+                                            </a>
+                                        @endauth
                                         <div class="heart">♡</div>
                                     </div>
 
@@ -272,6 +292,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+<x-floating-ui />
+
 
 @include('layout.footer')
 

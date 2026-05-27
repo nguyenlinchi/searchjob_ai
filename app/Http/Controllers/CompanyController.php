@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Employer;
 use App\Models\JobPosting;
 use App\Models\Location;
+use App\Models\Level;
 
 
 class CompanyController extends Controller

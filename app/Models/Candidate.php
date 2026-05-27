@@ -47,4 +47,8 @@ class Candidate extends Model
             'candidate_id'
         );
     }
+     public function account()
+    {
+        return $this->belongsTo(Account::class, 'account_id');
+    }
 }

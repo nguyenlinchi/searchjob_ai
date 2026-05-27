@@ -41,13 +41,13 @@
                         <div class="featured-left-content">
                             <span class="tag">{{ $featured[0]->category->name ?? '' }}</span>
 
-                            <a href="{{ route('career.show', $featured[0]->guide_id) }}">
+                            <a href="{{ route('career.show', $featured[0]->guide_id) }}" style="text-decoration:none; color:inherit;">
                                 <h3>{{ $featured[0]->title }}</h3>
                             </a>
 
                             <p>
                                 <i class="fa-regular fa-clock"></i>
-                                {{ date('d/m/Y') }}
+                                {{ $featured[0]->created_at->format('d/m/Y') }}
                             </p>
                         </div>
                     </div>
@@ -74,8 +74,8 @@
                 <div class="featured-item">
                     <div class="featured-text">
                         <span class="tag">{{ $item->category->name ?? '' }}</span>
-                        <h4 class="title">{{ $item->title }}</h4>
-                        <p>{{ date('d/m/Y') }}</p>
+                        <a href="{{route('career.show', $item->guide_id)}}" class="title" style="text-decoration:none; color:inherit;" >{{ $item->title }}</a>
+                        <p>{{ $item->created_at->format('d/m/Y') }}</p>
                     </div>
                     <img src="{{ $item->thumbnail }}">
                 </div>
@@ -111,13 +111,15 @@
                         {{ $item->category->name ?? '' }}
                     </span>
 
-                    <h3 class="career-title">
-                        {{ $item->title }}
-                    </h3>
+                    <a href="{{ route('career.show', $item->guide_id) }}" class="career-title-link">
+                        <h3 class="career-title">
+                            {{ $item->title }}
+                        </h3>
+                    </a>
 
                     <div class="career-meta">
                         <i class="fa-regular fa-clock"></i>
-                        {{ date('d/m/Y') }}
+                        {{ $item->created_at->format('d/m/Y') }}
                     </div>
 
                     <p class="career-desc">
@@ -183,12 +185,15 @@
                     {{ $item->category->name ?? 'BÍ KÍP TÌM VIỆC' }}
                 </span>
 
-                <h3>{{ $item->title }}</h3>
+                <a href="{{ route('career.show', $item->guide_id) }}" class="career-title-link">
+                        <h3 class="career-title">
+                            {{ $item->title }}
+                        </h3>
+                </a>
 
                 <p class="meta">
                     <i class="fa-regular fa-clock"></i>
-
-                     {{ date('d/m/Y') }}
+                        {{ $item->created_at->format('d/m/Y') }}
                 </p>
 
                 <p class="desc">
@@ -225,30 +230,28 @@
                             {{ $item->category->name }}
                         </span>
 
-                        <h3 class="news-headline">
+                        <a href="{{ route('career.show', $item->guide_id) }}" class="news-headline career-title-link">
+                        <h3 class="career-title">
                             {{ $item->title }}
                         </h3>
+                        </a>
 
                         <p class="news-meta">
                             <i class="fa-regular fa-clock"></i>
-                            {{ date('d/m/Y') }}
+                            {{ $item->created_at->format('d/m/Y') }}
                         </p>
 
                         <p class="news-excerpt">
                             {{ $item->summary }}
                         </p>
-
                     </div>
-
                     <img src="{{ $item->thumbnail }}" class="news-thumb">
-
                 </div>
                 @endforeach
 
             </div>
         </div>
                 <div class="market-column">
-
             <div class="column-header">
                 <h2 class="column-title">Kỹ năng nghề nghiệp</h2>
             </div>
@@ -257,20 +260,17 @@
 
                 @foreach($skills as $item)
                 <div class="news-item">
-
                     <div class="news-info">
-
                         <span class="news-tag orange">
                             {{ $item->category->name }}
                         </span>
-
-                        <h3 class="news-headline">
+                        <a href="{{ route('career.show', $item->guide_id) }}" class="news-headline career-title-link">
+                        <h3 class="career-title">
                             {{ $item->title }}
                         </h3>
-
+                        </a>
                         <p class="news-meta">
-                            
-                            {{ date('d/m/Y') }}
+                          {{ $item->created_at->format('d/m/Y') }}
                         </p>
 
                         <p class="news-excerpt">
@@ -295,7 +295,7 @@
                 <span class="mbti-brand">MBTI</span> <small>by</small>
             </div>
             <h2 class="mbti-title">TRẮC NGHIỆM<br>TÍNH CÁCH MBTI</h2>
-            <a href="{{ route('career.test') }}" class="mbti-btn">Làm trắc nghiệm ngay</a>
+            <a href="{{ route('mbti.home') }}" class="mbti-btn">Làm trắc nghiệm ngay</a>
         </div>
         
         <div class="mbti-cards-wrapper">
@@ -355,5 +355,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+
+<x-floating-ui />
+
+@include('layout.footer')
 
 @endsection

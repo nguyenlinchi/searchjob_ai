@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
 use App\Models\JobPosting;
 use App\Models\Employer;
 use App\Models\Category;
@@ -11,13 +15,14 @@ use App\Models\Candidate;
 use App\Models\SavedJob;
 use App\Helpers\SavedJobHelper;
 
-
-use Illuminate\Support\Facades\Auth;
-
 class HomeController extends Controller
 {
     public function index(Request $request)
     {
+
+        // =========================================
+        // DANH SÁCH VIỆC LÀM
+        // =========================================
 
         $query = JobPosting::with([
                 'employer',
@@ -27,40 +32,55 @@ class HomeController extends Controller
             ])
             ->where('status', 1);
 
-
+        // Tìm theo title
         if ($request->filled('title')) {
 
             $query->where(function ($q) use ($request) {
 
-                // tìm theo tên công việc
-                $q->where('job_title', 'like', '%' . $request->title . '%')
+                $q->where(
+                    'job_title',
+                    'like',
+                    '%' . $request->title . '%'
+                )
 
-                // tìm theo loại công việc
                 ->orWhereHas('jobType', function ($sub) use ($request) {
 
-                    $sub->where('job_type_name', 'like', '%' . $request->title . '%');
+                    $sub->where(
+                        'job_type_name',
+                        'like',
+                        '%' . $request->title . '%'
+                    );
 
                 });
 
             });
-
         }
 
-
+        // Tìm theo location
         if ($request->filled('location')) {
 
             $query->whereHas('location', function ($q) use ($request) {
-                $q->where('location_name', 'like', '%' . $request->location . '%');
-            });
 
+                $q->where(
+                    'location_name',
+                    'like',
+                    '%' . $request->location . '%'
+                );
+
+            });
         }
 
-
-        $jobs = $query->orderBy('job_id', 'desc')
-                    ->paginate(8);
+        $jobs = $query
+            ->orderBy('job_id', 'desc')
+            ->paginate(8);
 
         $jobs->appends($request->all());
 
+
+
+        // =========================================
+        // NHÀ TUYỂN DỤNG NỔI BẬT
+        // =========================================
 
         $topEmployers = Employer::withCount('jobs')
             ->orderBy('jobs_count', 'desc')
@@ -74,41 +94,143 @@ class HomeController extends Controller
             ->limit(3)
             ->get();
 
+
+
+        // =========================================
+        // DANH MỤC
+        // =========================================
+
         $categories = Category::withCount('jobs')
             ->orderBy('jobs_count', 'desc')
             ->get();
+
+
+
+        // =========================================
+        // BÀI VIẾT HƯỚNG NGHIỆP
+        // =========================================
+
         $guides = CareerGuide::with([
                 'category',
                 'tags'
-            ])->latest()->limit(3)->get();
-            $savedJobIds = [];
+            ])
+            ->latest()
+            ->limit(3)
+            ->get();
 
-        if (Auth::check()) {
 
-            $candidate = Candidate::where(
-                'account_id',
-                Auth::user()->account_id
-            )->first();
 
-            if ($candidate) {
+        // =========================================
+        // JOB ĐÃ LƯU
+        // =========================================
 
-                $savedJobIds = SavedJob::where(
-                        'candidate_id',
-                        $candidate->candidate_id
-                    )
-                    ->pluck('job_id')
-                    ->toArray();
-            }
-        }
         $savedJobIds = SavedJobHelper::getSavedJobIds();
 
+
+
+        // =========================================
+        // DASHBOARD
+        // =========================================
+
+        // Việc làm mới hôm nay
+        $newJobsToday = JobPosting::whereDate(
+            'posted_date',
+            Carbon::today()
+        )->count();
+
+        // Tổng việc làm
+        $totalJobs = JobPosting::where(
+            'status',
+            1
+        )->count();
+
+        // Tổng công ty
+        $totalCompanies = Employer::count();
+
+
+
+        // =========================================
+        // TOP 3 CÔNG TY TUYỂN NHIỀU NHẤT
+        // =========================================
+
+        $featuredCompanies = Employer::withCount([
+                'jobs' => function ($query) {
+
+                    $query->where('status', 1);
+
+                }
+            ])
+            ->having('jobs_count', '>', 0)
+            ->orderByDesc('jobs_count')
+            ->take(3)
+            ->get();
+
+
+
+        // =========================================
+        // BIỂU ĐỒ TĂNG TRƯỞNG 7 NGÀY
+        // =========================================
+
+        $jobGrowthLabels = [];
+        $jobGrowthData = [];
+
+        for ($i = 6; $i >= 0; $i--) {
+
+            $date = Carbon::today()->subDays($i);
+
+            $count = JobPosting::whereDate(
+                'posted_date',
+                $date
+            )->count();
+
+            $jobGrowthLabels[] = $date->format('d/m');
+
+            $jobGrowthData[] = $count;
+        }
+
+
+
+        // =========================================
+        // BIỂU ĐỒ NGÀNH NGHỀ
+        // =========================================
+
+        $jobsByCategory = Category::withCount('jobs')
+            ->orderBy('jobs_count', 'desc')
+            ->take(4)
+            ->get();
+
+        $categoryLabels = $jobsByCategory
+            ->pluck('category_name');
+
+        $categoryData = $jobsByCategory
+            ->pluck('jobs_count');
+
+
+
+        // =========================================
+        // RETURN VIEW
+        // =========================================
+
         return view('candidate.home', compact(
+
             'jobs',
             'topEmployers',
             'otherEmployers',
             'categories',
             'guides',
-            'savedJobIds'
+            'savedJobIds',
+
+            // dashboard
+            'newJobsToday',
+            'totalJobs',
+            'totalCompanies',
+            'featuredCompanies',
+
+            // chart
+            'jobGrowthLabels',
+            'jobGrowthData',
+            'categoryLabels',
+            'categoryData'
         ));
     }
 }

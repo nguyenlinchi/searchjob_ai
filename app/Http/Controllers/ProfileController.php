@@ -46,6 +46,12 @@ class ProfileController extends Controller
             ->whereIn('job_id', $savedJobIds)
             ->get();
     }
+        $savedJobs = SavedJob::with([
+        'job.employer',
+        'job.salary'
+    ])
+    ->where('candidate_id', Auth::user()->candidate->candidate_id)
+    ->get();
 
     return view('candidate.profile.index', compact(
         'user',
@@ -53,7 +59,8 @@ class ProfileController extends Controller
         'resumes',
         'applications',
         'jobs',
-        'savedJobIds'
+        'savedJobIds',
+        'savedJobs'
     ));
 }
 

@@ -440,6 +440,7 @@
   });
 </script>
 
+<x-floating-ui />
 
 @include('layout.footer')
 

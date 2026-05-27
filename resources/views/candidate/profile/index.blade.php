@@ -94,9 +94,17 @@
                 <div class="section-card mb-5">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h4 class="fw-bold mb-0">Hồ sơ trực tuyến</h4>
-                        <a href="{{ route('resume.create') }}" class="btn btn-success btn-sm rounded-pill px-3">
-                            <i class="bi bi-plus-lg me-1"></i> Tạo CV mới
-                        </a>
+                        <div class="d-flex align-items-center gap-2">
+                            <button class="btn btn-outline-danger btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#savedJobsModal">
+                                <i class="bi bi-heart-fill me-1"></i>
+                                Đã lưu
+                            </button>
+
+                            <a href="{{ route('resume.create') }}"class="btn btn-success btn-sm rounded-pill px-3">
+                                <i class="bi bi-plus-lg me-1"></i>
+                                Tạo CV mới
+                            </a>
+                        </div>
                     </div>
                     
                     <div class="row g-3">
@@ -168,6 +176,77 @@
     </div>
 </div>
 
+<div class="modal fade" id="savedJobsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h4 class="fw-bold">
+                    ❤️ Công việc đã lưu
+                </h4>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+            <div class="modal-body p-4">
+                @forelse($savedJobs as $saved)
+
+                    <div class="card border-0 shadow-sm rounded-4 mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="fw-bold text-primary mb-1">
+                                        {{ $saved->job->job_title }}
+                                    </h5>
+                                    <p class="text-muted mb-1">
+                                        {{ $saved->job->employer->company_name ?? 'Công ty ẩn danh' }}
+                                    </p>
+                                    <span class="badge bg-light text-dark">
+
+                                        {{ $job->salary->salary_range ?? '12 - 18 triệu' }}
+
+                                    </span>
+                                </div>
+
+                                <div class="text-end">
+                                    <span class="badge bg-success fs-6">
+                                        {{ rand(80,99) }}%
+                                    </span>
+                                    <p class="small text-muted mt-2">
+                                        AI phù hợp
+                                    </p>
+
+                                </div>
+                            </div>
+
+                            <div class="mt-3 d-flex gap-2">
+                                <a href="{{ route('jobs.show', $saved->job->job_id) }}"
+                                   class="btn btn-primary btn-sm rounded-pill">
+                                    Xem chi tiết
+                                </a>
+
+                                <button class="btn btn-outline-danger btn-sm rounded-pill remove-saved-btn" data-job-id="{{ $saved->job->job_id }}">
+                                    <i class="bi bi-trash me-1"></i>
+                                    Bỏ lưu
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-5">
+                        <i class="bi bi-heart fs-1 text-muted"></i>
+                        <p class="mt-3 text-muted">
+                            Chưa có công việc nào được lưu
+                        </p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     :root {
         --primary-color: #2563eb;
@@ -181,7 +260,6 @@
         padding-top: 100px; 
     }
 
-    /* Decor Elements */
     .decor-element {
         position: fixed;
         z-index: 0;
@@ -244,7 +322,6 @@
     .edit-cover-btn { top: 15px; right: 15px; }
     .edit-avatar-btn:hover { background: var(--primary-color); color: white; }
 
-    /* Soft Badges */
     .bg-primary-soft { background: #eff6ff; }
     .bg-success-soft { background: #f0fdf4; }
     .bg-warning-soft { background: #fffbeb; }
@@ -281,25 +358,23 @@
     }
     .input-premium {
         background-color: #ffffff !important;
-        border: 1px solid #e2e8f0 !important; /* Viền xám nhạt */
+        border: 1px solid #e2e8f0 !important; 
         border-radius: 12px !important;
         padding: 10px 15px;
         font-weight: 500;
         color: #334155;
-        /* Tạo độ nổi bằng đổ bóng nhẹ bên ngoài */
+
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02) !important;
         transition: all 0.2s ease-in-out;
     }
 
-    /* Hiệu ứng khi nhấn vào ô input (Focus) */
     .input-premium:focus {
-        border-color: #3b82f6 !important; /* Đổi sang viền xanh */
-        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important; /* Vầng sáng xanh nhạt xung quanh */
+        border-color: #3b82f6 !important; 
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important; 
         background-color: #f3eded !important;
         outline: none;
     }
 
-    /* Hiệu ứng cho nút bấm */
     .btn-hover-effect {
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
@@ -309,7 +384,6 @@
         box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
     }
 
-    /* Tinh chỉnh nhãn label cho chuyên nghiệp */
     .form-label {
         margin-left: 4px;
         margin-bottom: 6px;
@@ -317,6 +391,39 @@
     }
 </style>
 
-<!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<script>
+
+document.addEventListener("click", function (e) {
+    const button = e.target.closest(".remove-saved-btn");
+    if (!button) return;
+    e.preventDefault();
+    let jobId = button.dataset.jobId;
+    fetch("/save-job/" + jobId, {
+        method: "POST",
+        headers: {
+
+            "X-CSRF-TOKEN": document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
+
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+        if (data.status === "removed") {
+            button.closest(".card").remove();
+        }
+    })
+    .catch(error => {
+        console.log(error);
+    });
+});
+</script>
+
+<x-floating-ui />
 @endsection

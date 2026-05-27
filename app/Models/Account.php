@@ -28,11 +28,15 @@ class Account extends Authenticatable
         return $this->belongsTo(Role::class, 'role_id');
     }
     public function candidate()
-{
-    return $this->hasOne(
-        Candidate::class,
-        'account_id',
-        'account_id'
-    );
-}
+        {
+            return $this->hasOne(
+                Candidate::class,
+                'account_id',
+                'account_id'
+            );
+        }
+ public function employer()
+    {
+        return $this->hasOne(Employer::class, 'account_id');
+    }
 }

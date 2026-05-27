@@ -1,225 +1,391 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
-    <title>Hiring</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Hiring - Kết nối tài năng</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS Project -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/home.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/job.css') }}">
-        @yield('styles')
 
-    <!-- Bootstrap + Font -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    @yield('styles')
 
     <style>
-        body {
-            margin: 0;
-            padding: 0;
+
+        :root{
+            --primary-color:#2563eb;
+            --hover-color:#1d4ed8;
+            --text-main:#111827;
+            --transition:all .3s ease;
         }
 
-        /* HEADER */
-        .custom-navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 70px;
-            background: rgba(255,255,255,0.95);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 40px;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
+        body{
+            font-family:'Inter',sans-serif;
+            background:#ffffff;
         }
 
-        .nav-links {
-            display: flex;
-            align-items: center;
+        /* ================= NAVBAR ================= */
+
+        .custom-navbar{
+            position:fixed;
+
+            top:18px;
+            left:50%;
+
+            transform:translateX(-50%);
+
+            width:96%;
+            height:82px;
+
+            background: #f5f9ff;
+            backdrop-filter:blur(18px);
+            -webkit-backdrop-filter:blur(18px);
+            border-radius:28px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:0 38px;
+            z-index:999;
+            border:1px solid rgba(255,255,255,0.6);
+            box-shadow:
+                    0 10px 35px rgba(0,0,0,0.06),
+                    0 2px 10px rgba(0,0,0,0.03);
+
+            transition:var(--transition);
         }
 
-        .nav-links a {
-            margin: 0 10px;
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
+        .custom-navbar.scrolled{
+            top:10px;
+            height:74px;
         }
 
-        .nav-links a:hover {
-            color: #3b71e4;
+
+        .logo{
+            display:flex;
+            align-items:center;
+            text-decoration:none;
         }
 
-        .sign-in {
-            background: #3b71e4;
-            color: #fff !important;
-            padding: 6px 12px;
-            border-radius: 5px;
+        .logo img{
+            height:55px;
         }
 
-        .custom-navbar.scrolled {
-            background: #fff;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        .logo-text{
+            font-size:24px;
+            font-weight:800;
+            color:#2563eb;
+            margin-left:10px;
         }
+
+        /*  MENU ================= */
+
+        .nav-links{
+            display:flex;
+            align-items:center;
+            gap:42px;
+
+            margin-left:-130px;
+        }
+
+        .nav-item{
+            position:relative;
+            text-decoration:none;
+
+            color:#111827;
+
+            font-size:16px;
+            font-weight:600;
+
+            padding:8px 0;
+
+            transition:var(--transition);
+        }
+
+        .nav-item:hover{
+            color:var(--primary-color);
+        }
+
+        .nav-item.active{
+            color:var(--primary-color);
+        }
+
+
+        .nav-item::after{
+            content:"";
+            position:absolute;
+            left:50%;
+            bottom:-8px;
+            transform:translateX(-50%);
+            width:0;
+            height:4px;
+
+            border-radius:50px;
+
+            background:linear-gradient(
+                    to right,
+                    #2563eb,
+                    #60a5fa
+            );
+
+            transition:.3s;
+        }
+
+        .nav-item:hover::after{
+            width:70%;
+        }
+
+        .nav-item.active::after{
+            width:100%;
+        }
+
+
+        .auth-section{
+            display:flex;
+            align-items:center;
+            gap:16px;
+        }
+
+        .btn-login{
+            text-decoration:none;
+            color:#2563eb;
+            font-weight:700;
+            transition:.3s;
+        }
+
+        .btn-login:hover{
+            color:#1d4ed8;
+        }
+
+        .btn-register{
+            height:52px;
+            padding:0 28px;
+            border-radius:18px;
+            background:linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #3b82f6
+            );
+
+            color:white !important;
+            text-decoration:none;
+            font-weight:700;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            box-shadow:
+                    0 10px 25px rgba(37,99,235,0.25);
+
+            transition:.3s;
+        }
+
+        .btn-register:hover{
+            transform:translateY(-3px);
+
+            box-shadow:
+                    0 16px 35px rgba(37,99,235,0.35);
+        }
+
+
+        .user-pill{
+            display:flex;
+            align-items:center;
+            gap:12px;
+
+            background:#f8fafc;
+            border-radius:50px;
+            padding:7px 8px 7px 16px;
+            border:1px solid #e2e8f0;
+        }
+
+        .user-name{
+            text-decoration:none;
+            color:#111827;
+            font-weight:700;
+        }
+
+        .btn-logout{
+            width:36px;
+            height:36px;
+            border:none;
+            border-radius:50%;
+            background:white;
+            color:#ef4444;
+            cursor:pointer;
+            transition:.3s;
+        }
+
+        .btn-logout:hover{
+            background:#ef4444;
+            color:white;
+            transform:rotate(90deg);
+        }
+
+
+        @media(max-width:992px){
+
+            .nav-links{
+                display:none;
+            }
+
+            .custom-navbar{
+                padding:0 20px;
+            }
+
+            .logo-text{
+                font-size:20px;
+            }
+
+            .btn-register{
+                height:45px;
+                padding:0 18px;
+                font-size:14px;
+            }
+        }
+
     </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div class="custom-navbar">
-    <a href="#" class="logo">
-        <img src="https://res.cloudinary.com/dumvx2lsj/image/upload/v1754274553/FPT_logo_2010.svg_joiycj.png"
-             style="height:50px;">
-        <span style="font-size:20px;font-weight:bold;color:#3b71e4;margin-left:10px;">
+
+<nav class="custom-navbar">
+
+    <!-- Logo -->
+    <a href="{{ route('home') }}" class="logo">
+
+        <img src="https://res.cloudinary.com/dumvx2lsj/image/upload/v1778598486/logo-removebg-preview_aecyly.png"
+             alt="Logo">
+
+        <span class="logo-text">
             Hiring
         </span>
+
     </a>
 
+    <!-- Menu -->
     <div class="nav-links">
-        <a href="#">Trang chủ</a>
-        <a href="{{ route('jobs.index') }}">Việc làm</a>
-        <a href="#">CV</a>
-        <a href="{{ route('career.index') }}">Cẩm nang nghề nghiệp</a>
-        @guest
 
-    <!-- Chưa đăng nhập -->
-
-    <a href="{{ route('register') }}"
-       class="{{ request()->routeIs('register') ? 'active-link' : '' }}">
-
-        Đăng ký
-
-    </a>
-
-
-    <a href="{{ route('login') }}"
-       class="sign-in {{ request()->routeIs('login') ? 'active-link' : '' }}">
-
-        Đăng nhập
-
-    </a>
-
-@else
-
-    <!-- Đã đăng nhập -->
-
-    <span class="me-1">
-
-        Xin chào,
-
-        <a href="{{ route('profile') }}">
-
-            <strong>{{ Auth::user()->name }}</strong>
-
+        <a href="{{ route('home') }}"
+           class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}">
+            Trang chủ
         </a>
 
-    </span>
+        <a href="{{ route('jobs.index') }}"
+           class="nav-item {{ request()->routeIs('jobs.index') ? 'active' : '' }}">
+            Việc làm
+        </a>
 
+        <a href="{{ route('cv.index') }}"
+           class="nav-item">
+            CV
+        </a>
 
-    <form action="{{ route('logout') }}"
-          method="POST"
-          style="display:inline;">
+        <a href="{{ route('career.index') }}"
+           class="nav-item {{ request()->routeIs('career.index') ? 'active' : '' }}">
+            Cẩm nang nghề nghiệp
+        </a>
 
-        @csrf
-
-        <button type="submit" class="sign-in">
-
-            Đăng xuất
-
-        </button>
-
-    </form>
-
-@endguest
     </div>
-</div>
 
-<!-- CONTENT -->
-@yield('content')
+    <!-- Auth -->
+    <div class="auth-section">
+
+        @guest
+
+            <a href="{{ route('login') }}"
+               class="btn-login">
+                Đăng nhập
+            </a>
+
+            <a href="{{ route('register') }}"
+               class="btn-register">
+                Tham gia ngay
+            </a>
+
+        @else
+
+            <div class="user-pill">
+
+                <a href="{{ route('profile') }}"
+                   class="user-name">
+
+                    {{ Auth::user()->name }}
+
+                </a>
+
+                <form action="{{ route('logout') }}"
+                      method="POST">
+
+                    @csrf
+
+                    <button type="submit"
+                            class="btn-logout">
+
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        @endguest
+
+    </div>
+
+</nav>
+
+<!-- ================= CONTENT ================= -->
+
+<main>
+    @yield('content')
+</main>
+
+<!-- ================= SCRIPTS ================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    window.addEventListener("scroll", function() {
-        let navbar = document.querySelector(".custom-navbar");
-        if (window.scrollY > 50) {
+
+    // Scroll navbar effect
+
+    window.addEventListener("scroll", function(){
+
+        const navbar = document.querySelector(".custom-navbar");
+
+        if(window.scrollY > 20){
             navbar.classList.add("scrolled");
-        } else {
+        }else{
             navbar.classList.remove("scrolled");
         }
-    });
-</script>
-<script>
-
-document.querySelectorAll('.save-job-btn').forEach(button => {
-
-    button.addEventListener('click', function () {
-
-        let jobId = this.dataset.jobId;
-
-        let btn = this;
-
-        fetch(`/save-job/${jobId}`, {
-
-            method: 'POST',
-
-            headers: {
-                'X-CSRF-TOKEN':
-                    document.querySelector(
-                        'meta[name="csrf-token"]'
-                    ).content,
-
-                'Accept': 'application/json'
-            }
-
-        })
-
-        .then(response => response.json())
-
-        .then(data => {
-
-            // CHƯA LOGIN
-            if(data.status === 'login_required'){
-
-                window.location.href = "/login";
-                return;
-            }
-
-            let icon = btn.querySelector('i');
-
-            // SAVE
-            if(data.status === 'saved'){
-
-                btn.classList.add('saved');
-
-                icon.classList.remove('fa-regular');
-                icon.classList.add('fa-solid');
-            }
-
-            // REMOVE
-            if(data.status === 'removed'){
-
-                btn.classList.remove('saved');
-
-                icon.classList.remove('fa-solid');
-                icon.classList.add('fa-regular');
-            }
-
-        });
 
     });
-
-});
 
 </script>
 
 </body>
+
 </html>

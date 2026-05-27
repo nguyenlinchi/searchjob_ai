@@ -16,7 +16,6 @@ class SavedJobHelper
             return [];
         }
 
-        // USER LOGIN
         $account = Auth::user();
 
         // TÌM CANDIDATE
@@ -25,13 +24,13 @@ class SavedJobHelper
             $account->account_id
         )->first();
 
-        // KHÔNG PHẢI CANDIDATE
+        // KHÔNG CÓ CANDIDATE
         if (!$candidate) {
 
             return [];
         }
 
-        // LẤY DANH SÁCH JOB ĐÃ LƯU
+        // LẤY DANH SÁCH JOB ĐÃ SAVE
         return SavedJob::where(
                 'candidate_id',
                 $candidate->candidate_id

@@ -70,9 +70,9 @@ class AuthController extends Controller
             $role = $user->role->role_name;
 
             if ($role == 'ADMIN') {
-                return redirect('/admin');
+                return redirect('/admin/dashboard');
             } elseif ($role == 'EMPLOYER') {
-                return redirect('/employer');
+                return redirect('/employer/dashboard');
             } else {
                 return redirect('/candidate/home');
             }

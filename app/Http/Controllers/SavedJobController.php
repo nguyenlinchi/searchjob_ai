@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\SavedJob;
 use App\Models\Candidate;
 use Illuminate\Support\Facades\Auth;
 
 class SavedJobController extends Controller
 {
-
     public function toggle($id)
 {
     if (!Auth::check()) {
@@ -33,14 +31,16 @@ class SavedJobController extends Controller
         ]);
     }
 
-    $saved = SavedJob::where(
+    // KIỂM TRA ĐÃ SAVE CHƯA
+    $savedJob = SavedJob::where(
             'candidate_id',
             $candidate->candidate_id
         )
         ->where('job_id', $id)
         ->first();
 
-    if ($saved) {
+    // ĐÃ SAVE -> GỠ TIM
+    if ($savedJob) {
 
         SavedJob::where(
                 'candidate_id',
@@ -54,6 +54,7 @@ class SavedJobController extends Controller
         ]);
     }
 
+    // CHƯA SAVE -> THÊM
     SavedJob::create([
         'candidate_id' => $candidate->candidate_id,
         'job_id' => $id
@@ -64,7 +65,7 @@ class SavedJobController extends Controller
     ]);
 }
 
-
+    // DANH SÁCH JOB ĐÃ LƯU
     public function index()
     {
         if (!Auth::check()) {

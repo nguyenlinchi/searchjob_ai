@@ -58,60 +58,184 @@
 
             <!-- HEADER -->
             <div class="row mb-3 align-items-center">
-                <div class="col-lg-3">
-                    <h5 class="filter-title">Bộ lọc nâng cao <span class="reset-filter" onclick="resetFilters()">Đặt lại</span></h5>
 
-                </div>
+    <div class="col-lg-3">
 
-                <div class="col-lg-9 d-flex justify-content-between">
-                    <span>Hiển thị 1 - 6 của 20 việc làm</span>
+        <h5 class="filter-title">
+            Bộ lọc nâng cao
+                <a href="{{ route('jobs.index') }}" class="reset-filter">
+                    Đặt lại
+                </a>
+        </h5>
 
-                    <select class="job-sort">
-                        <option>Mới nhất</option>
-                        <option>Hạn gần nhất</option>
-                    </select>
-                </div>
+    </div>
+
+    <div class="col-lg-9 d-flex justify-content-between align-items-center">
+
+        <span>
+            Hiển thị
+            {{ $jobs->firstItem() ?? 0 }}
+            -
+            {{ $jobs->lastItem() ?? 0 }}
+            của
+            {{ $jobs->total() }}
+            việc làm
+        </span>
+
+        <form method="GET" action="{{ route('jobs.index') }}">
+
+            <!-- giữ filter cũ -->
+            <input type="hidden" name="title" value="{{ request('title') }}">
+
+            @if(request('salary'))
+                @foreach(request('salary') as $salary)
+                    <input type="hidden" name="salary[]" value="{{ $salary }}">
+                @endforeach
+            @endif
+
+            @if(request('category'))
+                @foreach(request('category') as $category)
+                    <input type="hidden" name="category[]" value="{{ $category }}">
+                @endforeach
+            @endif
+
+            <select name="sort"
+                    class="job-sort"
+                    onchange="this.form.submit()">
+
+                <option value="latest"
+                    {{ request('sort') == 'latest' ? 'selected' : '' }}>
+                    Mới nhất
+                </option>
+
+                <option value="deadline"
+                    {{ request('sort') == 'deadline' ? 'selected' : '' }}>
+                    Hạn gần nhất
+                </option>
+
+            </select>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    <!-- FILTER -->
+    <div class="col-lg-3 filter-section">
+
+        <form id="filterForm"
+              method="GET"
+              action="{{ route('jobs.index') }}">
+
+            <!-- SEARCH -->
+            <h6>Tìm kiếm công việc</h6>
+
+            <input
+                type="text"
+                name="title"
+                class="form-control mb-3"
+                placeholder="Vị trí, chức danh..."
+                value="{{ request('title') }}"
+            >
+
+            <!-- CATEGORY -->
+            <h6>Ngành nghề</h6>
+
+            @foreach($categories as $category)
+
+                <label>
+
+                    <input
+                        type="checkbox"
+                        name="category[]"
+                        value="{{ $category->category_id }}"
+                        {{ in_array($category->category_id, request('category', [])) ? 'checked' : '' }}
+                    >
+
+                    {{ $category->category_name }}
+
+                </label>
+
+                <br>
+
+            @endforeach
+
+            <!-- SALARY -->
+            <h6 class="mt-3">Mức lương</h6>
+
+            @foreach($salaries as $salary)
+
+                <label>
+
+                    <input
+                        type="checkbox"
+                        name="salary[]"
+                        value="{{ $salary->salary_id }}"
+                        {{ in_array($salary->salary_id, request('salary', [])) ? 'checked' : '' }}
+                    >
+
+                    {{ $salary->salary_range }}
+
+                </label>
+
+                <br>
+
+            @endforeach
+
+            <!-- LOCATION -->
+            <h6 class="mt-3">Khu vực</h6>
+
+            <select name="location_id" class="form-control">
+
+                <option value="">
+                    Tất cả khu vực
+                </option>
+
+                @foreach($locations as $location)
+
+                    <option
+                        value="{{ $location->location_id }}"
+                        {{ request('location_id') == $location->location_id ? 'selected' : '' }}
+                    >
+
+                        {{ $location->location_name }}
+
+                    </option>
+
+                @endforeach
+
+            </select>
+
+            <!-- BUTTON -->
+            <div class="mt-4 d-grid gap-2">
+
+                <button type="submit" class="btn btn-primary">
+
+                    Tìm kiếm
+
+                </button>
+
+                <a href="{{ route('jobs.index') }}"
+                   class="btn btn-outline-secondary">
+
+                    Xóa bộ lọc
+
+                </a>
+
             </div>
 
-            <div class="row">
+        </form>
 
-                <!-- FILTER -->
-                <div class="col-lg-3 filter-section">
-                 <form id="filterForm" method="GET" action="{{ route('jobs.index') }}">
-
-                    <h6>Mức lương</h6>
-                    <label>
-                         <input type="checkbox" name="salary_range" value="" 
-                                        {{ empty(request('salary_range')) ? 'checked' : '' }} 
-                                        onchange="submitFilterForm()"> 
-                                    Tất cả
-                                </label><br>
-
-                    @foreach($salaries as $salary)
-                        <label>
-                            <input type="checkbox" name="salary[]" value="{{ $salary->salary_id }}">
-                            {{ $salary->salary_range }}
-                        </label><br>
-                    @endforeach
-
-                    <h6 class="mt-3">Vị trí</h6>
-                    <label>
-                        <input type="checkbox" value=""> Tất cả
-                    </label><br>
-                    @foreach($categories as $category)
-                        <label>
-                            <input type="checkbox" name="category[]" value="{{ $category->category_id }}">
-                            {{ $category->category_name }}
-                        </label><br>
-                    @endforeach
-                     </form>
-                </div>
+    </div>
 
                 <!-- JOB LIST -->
             <div class="col-lg-9">
                 <div class="row">
 
-                    @forelse($jobs->take(6) as $job)
+                    @forelse($jobs->take(9) as $job)
 
                         <div class="col-lg-4 col-md-6 mb-4">
                             <div class="job-card">
@@ -130,9 +254,9 @@
                                             @include('components.save-job-button')
                                         </h5>
 
-                                        <span>
+                                        <a href="{{ route('company', $job->employer_id) }}" class="company-link" style="text-decoration:none; color:inherit;">
                                             {{ $job->employer->company_name ?? 'Chưa có công ty' }}
-                                        </span><br>
+                                        </a><br>
 
                                         <span class="job-deadline">
                                             Thời hạn:
@@ -237,8 +361,77 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+<script>
+document.addEventListener("click", function (e) {
 
+    const button = e.target.closest(".save-job-btn");
 
+    if (!button) return;
+
+    e.preventDefault();
+
+    let jobId = button.dataset.jobId;
+
+    let icon = button.querySelector("i");
+
+    fetch("/save-job/" + jobId, {
+
+        method: "POST",
+
+        headers: {
+            "X-CSRF-TOKEN": document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
+
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        console.log(data);
+
+        // THẢ TIM
+        if (data.status === "saved") {
+
+            button.classList.add("saved");
+
+            icon.classList.remove("fa-regular");
+            icon.classList.add("fa-solid");
+
+        }
+
+        // GỠ TIM
+        else if (data.status === "removed") {
+
+            button.classList.remove("saved");
+
+            icon.classList.remove("fa-solid");
+            icon.classList.add("fa-regular");
+
+        }
+
+        // CHƯA LOGIN
+        else if (data.status === "login_required") {
+
+            window.location.href = "/login";
+
+        }
+
+    })
+
+    .catch(error => {
+        console.log(error);
+    });
+
+});
+</script>
+
+<x-floating-ui />
 
 @include('layout.footer')
 @endsection

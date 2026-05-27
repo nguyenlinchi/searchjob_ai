@@ -53,7 +53,7 @@ class JobController extends Controller
             $query->orderBy('job_id', 'desc');
         }
 
-        $jobs = $query->paginate(6)->appends($request->all());
+        $jobs = $query->paginate(9)->appends($request->all());
 
         $categories = Category::all();
         $salaries = Salary::all();
@@ -74,7 +74,7 @@ class JobController extends Controller
 
             $relatedJobs = JobPosting::where('category_id', $job->category_id)
                 ->where('job_id', '!=', $job->job_id)
-                ->orderBy('posted_date', 'desc') // ✅ sửa ở đây
+                ->orderBy('posted_date', 'desc') 
                 ->take(4)
                 ->get();
             $savedJobIds = SavedJobHelper::getSavedJobIds();
