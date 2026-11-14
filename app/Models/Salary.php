@@ -8,4 +8,6 @@ class Salary extends Model
     protected $table = 'salaries';
     protected $primaryKey = 'salary_id';
     public $timestamps = false;
+
+    protected $fillable = ['salary_range'];
 }
